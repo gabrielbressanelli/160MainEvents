@@ -219,6 +219,11 @@ input:focus, textarea:focus, select:focus{
   .hero-cta{ transition: none }
 }
 
+/* --- Details card: true brown background, no white edge --- */
 .details{
-  background-color: rgba(88, 57, 39);
+  /* use rgb(...) or rgba(...,1); your previous rgba(...) was invalid */
+  background: rgb(88 57 39) !important;     /* solid brown */
+  border: none !important;                   /* remove the light border ring */
+  box-shadow: 0 10px 30px rgba(0,0,0,.22);   /* slightly stronger shadow for contrast */
+  color: #fff;                               /* readable text on brown */
 }
