@@ -277,10 +277,15 @@ fieldset.inline{ border:0; padding:0; margin:8px 0 12px }
 .cta:focus-visible{ outline: 3px solid #ffe3a3; outline-offset: 2px }
 
 /* Optional: full-width on small screens */
-@media (max-width: 420px){
-  .card .cta{ width: 100%; }
+@media (max-width: 1080px){
+  .card .cta{ width: 80%; }
 }
 
 /* Keep hero button behavior; it already has class 'hero-cta' */
 .hero-cta{ position: absolute; left: 50%; transform: translateX(-50%); z-index: 2; }
 /* and your bottom offset rule from earlier */
+
+.centralizer{
+  margin-left: justify;
+  margin-right: justify;
+}
