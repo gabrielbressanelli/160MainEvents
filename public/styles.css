@@ -286,6 +286,7 @@ fieldset.inline{ border:0; padding:0; margin:8px 0 12px }
 /* and your bottom offset rule from earlier */
 
 .centralizer{
-  margin-left: justify;
-  margin-right: justify;
+  text-align:center;
+  width:100%;
 }
+.centralizer .cta{ display:inline-block; }
