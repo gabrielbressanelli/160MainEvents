@@ -103,9 +103,47 @@ fieldset.inline{border:0; padding:0; margin:8px 0 12px}
 .brand{ display:flex; align-items:center; gap:10px; text-decoration:none }
 .brand-logo{ height: 34px; width: auto; display:block }
 .nav-link{
-  color: var(--ink); text-decoration: none; font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;                    /* generous tap target */
+  height: 40px;
+  padding: 6px;                   /* inner breathing room */
+  border-radius: 8px;
+  text-decoration: none;          /* no underline for icon */
+  color: inherit;
 }
-.nav-link:hover, .nav-link:focus{ text-decoration: underline }
+
+.nav-link:focus-visible{
+  outline: 3px solid #c8a573;     /* brand-ish focus */
+  outline-offset: 2px;
+}
+
+/* Icon image itself */
+.instagram-logo{
+  display: block;
+  width: 28px;
+  height: 28px;
+  object-fit: contain;            /* preserve aspect */
+  image-rendering: -webkit-optimize-contrast;
+}
+
+/* Hover/active states (subtle) */
+@media (hover: hover){
+  .nav-link:hover .instagram-logo{
+    filter: brightness(1.05) contrast(1.05);
+    transform: translateY(-1px);
+  }
+}
+.nav-link:active .instagram-logo{
+  transform: translateY(0);
+  filter: brightness(.97);
+}
+
+/* If your topnav uses tight vertical padding on mobile, keep target comfy */
+@media (max-width: 480px){
+  .nav-link{ width: 44px; height: 44px; padding: 8px; }
+}
 
 /* --- Hero brightness + reliable CTA tap target --- */
 .hero{
