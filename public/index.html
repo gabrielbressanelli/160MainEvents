@@ -15,14 +15,11 @@
     <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
   </head>
   <body>
-    <header class="hero">
+    <header class="hero" aria-label="Piedmont Wine Dinner">
       <div class="hero-overlay"></div>
-      <img src="/images/160Main-New.png" alt="160 Main" class="logo" />
-      <div class="hero-copy">
-        <h1>Piedmont Wine Dinner</h1>
-        <p class="subhead">Wednesday, Nov 19 at 7:00 PM · $250 per person</p>
-        <button class="cta" onclick="document.getElementById('rsvp').scrollIntoView({behavior:'smooth'})">Reserve Your Spot</button>
-      </div>
+      <button class="cta hero-cta" onclick="document.getElementById('rsvp').scrollIntoView({behavior:'smooth'})">
+        Reserve Your Spot
+      </button>
     </header>
 
     <main>
