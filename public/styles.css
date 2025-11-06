@@ -227,3 +227,64 @@ input:focus, textarea:focus, select:focus{
   box-shadow: 0 10px 30px rgba(0,0,0,.22);   /* slightly stronger shadow for contrast */
   color: #fff;                               /* readable text on brown */
 }
+
+/* Brand brown token */
+:root{
+  --brown: rgb(88 57 39);
+}
+
+/* 1) DETAILS = full-bleed brown band (no white rim) */
+.details{
+  position: relative;
+  background: none !important;      /* kill local white/brown box bg */
+  border: 0 !important;
+  border-radius: 0 !important;
+  padding: 32px 20px;               /* inner breathing room */
+  color: #fff;                      /* readable on brown */
+}
+.details::before{
+  content: "";
+  position: absolute;
+  z-index: -1;
+  left: 50%;
+  transform: translateX(-50%);
+  top: 0; bottom: 0;
+  width: 100vw;                     /* FULL-BLEED BACKGROUND */
+  background: var(--brown);
+}
+.details h2{ color:#fff; }
+.details a{ color:#ffe3a3; text-decoration: underline; }
+.details a:hover{ text-decoration: none; }
+
+/* 2) RSVP CARD = cream card with the SAME brown as its surrounding band */
+#rsvp{
+  position: relative;               /* anchor the band */
+  background: var(--form-cream);    /* your cream card stays */
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  box-shadow: var(--shadow);
+  margin: 32px auto;                /* space from the brown band edges */
+}
+#rsvp::before{
+  content: "";
+  position: absolute;
+  z-index: -1;
+  left: 50%;
+  transform: translateX(-50%);
+  /* extend the brown beyond the card so the "padding" around the card is brown,
+     not white. Adjust the +/- values if you want thicker/thinner band */
+  top: -24px;                       /* brown above card */
+  bottom: -24px;                    /* brown below card */
+  width: 100vw;                     /* FULL-BLEED */
+  background: var(--brown);
+  border: 0;
+  border-radius: 0;
+}
+
+/* Optional: ensure the main container doesn't visually fight the bands */
+main{ position: relative; z-index: 0; }
+
+/* Keep inputs white inside the cream card */
+#rsvp input, #rsvp textarea, #rsvp select{
+  background: #fff;
+}
