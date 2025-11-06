@@ -7,9 +7,9 @@
   --border:#e6e2da;
   --shadow:0 10px 30px rgba(0,0,0,.18);
 
-  --brown: rgb(88 57 39); /* page background */
+  --brown: rgb(88 57 39);
   --white: rgb(255 255 255);
-  --form-cream:#f6efe3;       /* shared cream for navbar + form card */
+  --form-cream:#f6efe3;   /* shared cream for navbar + form card */
   --nav-cream:#f6efe3;
   --cta-top-shadow: 0 8px 18px rgba(0,0,0,.22);
 }
@@ -17,18 +17,20 @@
 /* Base */
 *{ box-sizing:border-box }
 html,body{ margin:0; padding:0 }
+html{ -webkit-text-size-adjust: 100%; }
 body{
   font-family: system-ui,-apple-system,Segoe UI,Roboto,Inter,Arial,sans-serif;
   color: var(--ink);
-  background: var(--white);        /* entire page on brown */
+  background: var(--white);        /* page shell is white */
   line-height: 1.5;
 }
 
 /* Navbar */
 .topnav{
   position: sticky; top: 0; z-index: 1000;
-  background: var(--nav-cream);    /* cream to match form card */
+  background: var(--nav-cream);
   border-bottom: 1px solid var(--border);
+  padding-top: env(safe-area-inset-top);
 }
 .topnav-inner{
   max-width: 980px; margin: 0 auto; padding: 10px 16px;
@@ -77,7 +79,7 @@ body{
 }
 .hero-overlay{
   position: absolute; inset: 0;
-  pointer-events: none;             /* never block taps */
+  pointer-events: none;
   background: linear-gradient(
     180deg,
     rgba(0,0,0,.10) 0%,
@@ -87,7 +89,7 @@ body{
   );
 }
 .logo{
-  position:absolute; top:20px; left:50%; transform:translateX(-50%);
+  position:absolute; top: max(20px, env(safe-area-inset-top)); left:50%; transform:translateX(-50%);
   width:200px; max-width:60vw;
   filter: drop-shadow(0 2px 6px rgba(0,0,0,.5));
 }
@@ -101,8 +103,8 @@ body{
   padding: 14px 22px; box-shadow: var(--cta-top-shadow);
   transition: transform .12s ease, opacity .12s ease;
 }
-.hero-cta:hover{ transform: translateX(-50%) scale(1.02) }
-.hero-cta:active{ transform: translateX(-50%) scale(.98) }
+.hero-cta:hover{ transform: translateX(-50%) scale(1.015) }
+.hero-cta:active{ transform: translateX(-50%) scale(.985) }
 .hero-cta:focus-visible{ outline: 3px solid #ffe3a3; outline-offset: 2px }
 @supports (padding: max(0px)){
   .hero-cta{ bottom: max(28px, env(safe-area-inset-bottom)); }
@@ -111,20 +113,39 @@ body{
 /* Layout container */
 main{ max-width:840px; margin:40px auto; padding:0 20px }
 
-/* Details section — NOT a card; sits on brown */
-.details{
-  background: var(--brown);   /* no box background */
-  border: 0; border-radius: 0; box-shadow: none;
-  color: #fff;               /* readable on brown */
-  padding: 24px 0;           /* vertical rhythm; container handles side padding */
+/* ===== Full-bleed utilities for band sections ===== */
+.full-bleed{
+  width: 100vw;
+  position: relative;
+  left: 50%;
+  right: 50%;
+  margin-left: -50vw;
+  margin-right: -50vw;
 }
-.details h2{ margin:0 0 8px 0; color:#fff }
+.section-inner{
+  max-width: 840px;
+  margin: 0 auto;
+  padding: 0 20px;   /* match main side padding */
+}
+
+/* About the Evening — true edge-to-edge brown band */
+.details{
+  background: var(--brown);
+  color: #fff;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+  padding: 28px 0;                 /* vertical rhythm; horizontal via .section-inner */
+  padding-top: max(28px, env(safe-area-inset-top));
+}
+.details h2{ margin: 0 0 8px 0; color:#fff }
+.details p{ color: rgba(255,255,255,.92); margin: 0 }
 .bullets{ margin:12px 0 0 0; padding-left:20px }
-.bullets li::marker{ color: rgba(255,255,255,.7) }
+.bullets li::marker{ color: rgba(255,255,255,.85) }
 
 /* RSVP card — cream */
 .card{
-  background: var(--form-cream);  /* cream to match navbar */
+  background: var(--form-cream);
   border: 1px solid var(--border);
   border-radius: 16px;
   padding: 24px;
@@ -145,6 +166,7 @@ input, textarea, select{
   font-size:16px;
   background:#fff; color:var(--ink);
   box-shadow: inset 0 1px 0 rgba(0,0,0,.02);
+  min-height: 44px; /* tap target on iOS */
 }
 input::placeholder, textarea::placeholder{ color:#9aa1a8; opacity:1 }
 input:focus, textarea:focus, select:focus{
@@ -183,6 +205,7 @@ fieldset.inline{ border:0; padding:0; margin:8px 0 12px }
   .topnav-inner{ padding:10px 14px }
   main{ margin:28px auto; padding:0 16px }
   .card{ padding:18px; border-radius:14px }
+  .hero{ min-height: 58vh; }
 }
 
 /* Reduced motion */
