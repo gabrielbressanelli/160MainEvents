@@ -7,7 +7,8 @@
   --border:#e6e2da;
   --shadow:0 10px 30px rgba(0,0,0,.18);
 
-  --brown: rgb(88 57 39);     /* page background */
+  --brown: rgb(88 57 39); /* page background */
+  --white: rgb(255 255 255);
   --form-cream:#f6efe3;       /* shared cream for navbar + form card */
   --nav-cream:#f6efe3;
   --cta-top-shadow: 0 8px 18px rgba(0,0,0,.22);
@@ -19,7 +20,7 @@ html,body{ margin:0; padding:0 }
 body{
   font-family: system-ui,-apple-system,Segoe UI,Roboto,Inter,Arial,sans-serif;
   color: var(--ink);
-  background: var(--brown);        /* entire page on brown */
+  background: var(--white);        /* entire page on brown */
   line-height: 1.5;
 }
 
