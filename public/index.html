@@ -56,66 +56,70 @@
         </div>
       </section>
 
-      <section id="rsvp" class="card">
-        <h2>RSVP</h2>
-        <form id="rsvp-form" novalidate>
-          <div class="grid">
-            <label>
-              <span>First Name*</span>
-              <input type="text" name="first_name" required autocomplete="given-name" />
-              <small class="error" data-for="first_name"></small>
-            </label>
-            <label>
-              <span>Last Name*</span>
-              <input type="text" name="last_name" required autocomplete="family-name" />
-              <small class="error" data-for="last_name"></small>
-            </label>
-          </div>
-          <div class="grid">
-            <label>
-              <span>Phone*</span>
-              <input type="tel" name="phone" required inputmode="tel" placeholder="e.g., (248) 555‑1234" />
-              <small class="error" data-for="phone"></small>
-            </label>
-            <label>
-              <span>Email*</span>
-              <input type="email" name="email" required autocomplete="email" />
-              <small class="error" data-for="email"></small>
-            </label>
-          </div>
-          <fieldset class="inline">
-            <legend>Will you attend?*</legend>
-            <label class="radio"><input type="radio" name="will_attend" value="yes" required /> <span>Yes</span></label>
-            <label class="radio"><input type="radio" name="will_attend" value="no" /> <span>No</span></label>
-            <small class="error" data-for="will_attend"></small>
-          </fieldset>
-          <label>
-            <span>Attendance Notes</span>
-            <textarea name="notes" rows="4" placeholder="Dietary needs, seating requests, etc."></textarea>
-          </label>
+      <section class="rsvp-band full-bleed" aria-label="RSVP">
+        <div class="section-inner">
+          <section id="rsvp" class="card">
+            <h2>RSVP</h2>
+            <form id="rsvp-form" novalidate>
+              <div class="grid">
+                <label>
+                  <span>First Name*</span>
+                  <input type="text" name="first_name" required autocomplete="given-name" />
+                  <small class="error" data-for="first_name"></small>
+                </label>
+                <label>
+                  <span>Last Name*</span>
+                  <input type="text" name="last_name" required autocomplete="family-name" />
+                  <small class="error" data-for="last_name"></small>
+                </label>
+              </div>
+              <div class="grid">
+                <label>
+                  <span>Phone*</span>
+                  <input type="tel" name="phone" required inputmode="tel" placeholder="e.g., (248) 555‑1234" />
+                  <small class="error" data-for="phone"></small>
+                </label>
+                <label>
+                  <span>Email*</span>
+                  <input type="email" name="email" required autocomplete="email" />
+                  <small class="error" data-for="email"></small>
+                </label>
+              </div>
+              <fieldset class="inline">
+                <legend>Will you attend?*</legend>
+                <label class="radio"><input type="radio" name="will_attend" value="yes" required /> <span>Yes</span></label>
+                <label class="radio"><input type="radio" name="will_attend" value="no" /> <span>No</span></label>
+                <small class="error" data-for="will_attend"></small>
+              </fieldset>
+              <label>
+                <span>Attendance Notes</span>
+                <textarea name="notes" rows="4" placeholder="Dietary needs, seating requests, etc."></textarea>
+              </label>
 
-          <input type="hidden" name="utm_source" />
-          <input type="hidden" name="utm_medium" />
-          <input type="hidden" name="utm_campaign" />
+              <input type="hidden" name="utm_source" />
+              <input type="hidden" name="utm_medium" />
+              <input type="hidden" name="utm_campaign" />
 
-          <div class="cf-turnstile" data-sitekey="0x4AAAAAAB_eQ0EYUm3xAYSK"></div>
+              <div class="cf-turnstile" data-sitekey="0x4AAAAAAB_eQ0EYUm3xAYSK"></div>
 
-          <button id="submit" type="submit" class="cta">Submit RSVP</button>
-          <div id="form-alert" class="alert" hidden></div>
-        </form>
+              <button id="submit" type="submit" class="cta">Submit RSVP</button>
+              <div id="form-alert" class="alert" hidden></div>
+            </form>
 
-        <div id="success-yes" class="success" hidden>
-          <h3>You're in!</h3>
-          <p>We have your RSVP for Wednesday, Nov 19 at 7:00 PM. A confirmation email is on the way.</p>
-          <div class="calendar-links">
-            <a id="gcal" target="_blank" rel="noopener">Add to Google Calendar</a>
-            <a id="ics" download="Piedmont-Wine-Dinner.ics">Download .ics</a>
-          </div>
-        </div>
+            <div id="success-yes" class="success" hidden>
+              <h3>You're in!</h3>
+              <p>We have your RSVP for Wednesday, Nov 19 at 7:00 PM. A confirmation email is on the way.</p>
+              <div class="calendar-links">
+                <a id="gcal" target="_blank" rel="noopener">Add to Google Calendar</a>
+                <a id="ics" download="Piedmont-Wine-Dinner.ics">Download .ics</a>
+              </div>
+            </div>
 
-        <div id="success-no" class="success" hidden>
-          <h3>Thanks for letting us know.</h3>
-          <p>Your response was recorded. If plans change, simply reply to the confirmation email.</p>
+            <div id="success-no" class="success" hidden>
+              <h3>Thanks for letting us know.</h3>
+              <p>Your response was recorded. If plans change, simply reply to the confirmation email.</p>
+            </div>
+          </section>
         </div>
       </section>
     </main>
