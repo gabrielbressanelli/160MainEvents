@@ -94,20 +94,40 @@ body{
   filter: drop-shadow(0 2px 6px rgba(0,0,0,.5));
 }
 .hero-cta{
-  position: absolute; left: 50%; transform: translateX(-50%);
-  bottom: 28px; z-index: 2;
-  min-width: 220px; min-height: 44px;
+  position: absolute;
+  left: 50%;
+  bottom: 28px;
+  transform: translate(-50%, 0);     /* center horizontally; fixed baseline */
+  z-index: 2;
+
+  min-width: 220px;
+  min-height: 44px;
+  padding: 14px 22px;
+
   background: linear-gradient(180deg, #c98b3e 0%, #a86a1f 100%);
-  color: #fff; font-weight: 700;
-  border: none; border-radius: 999px;
-  padding: 14px 22px; box-shadow: var(--cta-top-shadow);
+  color: #fff;
+  font-weight: 700;
+  border: none;
+  border-radius: 999px;
+  box-shadow: var(--cta-top-shadow);
+
+  transform-origin: center bottom;   /* scaling stays centered */
   transition: transform .12s ease, opacity .12s ease;
 }
-.hero-cta:hover{ transform: translateX(-50%) scale(1.015) }
-.hero-cta:active{ transform: translateX(-50%) scale(.985) }
-.hero-cta:focus-visible{ outline: 3px solid #ffe3a3; outline-offset: 2px }
-@supports (padding: max(0px)){
-  .hero-cta{ bottom: max(28px, env(safe-area-inset-bottom)); }
+
+/* If you want *no* visual movement at all, delete these two rules. */
+.hero-cta:hover  { transform: translate(-50%, 0) scale(1.01); }
+.hero-cta:active { transform: translate(-50%, 0) scale(.99); }
+
+.hero-cta:focus-visible{
+  outline: 3px solid #ffe3a3;
+  outline-offset: 2px;
+}
+
+@supports (padding: max(0px)) {
+  .hero-cta{
+    bottom: max(28px, env(safe-area-inset-bottom)); /* avoid iOS home bar */
+  }
 }
 
 /* Layout container */
@@ -281,9 +301,7 @@ fieldset.inline{ border:0; padding:0; margin:8px 0 12px }
   .card .cta{ width: 80%; }
 }
 
-/* Keep hero button behavior; it already has class 'hero-cta' */
-.hero-cta{ position: absolute; left: 50%; transform: translateX(-50%); z-index: 2; }
-/* and your bottom offset rule from earlier */
+
 
 .centralizer{
   text-align:center;
