@@ -232,9 +232,9 @@ fieldset.inline{ border:0; padding:0; margin:8px 0 12px }
   text-align: left;        /* preserves easy scanning of bullet text */
 }
 
-.hero-cta{ bottom: 10px; }
+.hero-cta{ bottom: 4px; }
 @supports (padding: max(0px)){
-  .hero-cta{ bottom: max(10px, env(safe-area-inset-bottom)); }
+  .hero-cta{ bottom: max(4px, env(safe-area-inset-bottom)); }
 }
 
 .rsvp-band{
@@ -248,5 +248,5 @@ fieldset.inline{ border:0; padding:0; margin:8px 0 12px }
 /* Size and center the card on the brown band */
 .rsvp-band .card{
   margin: 0 auto;
-  max-width: 720px; /* adjust as needed */
+  max-width: 620px; /* adjust as needed */
 }
