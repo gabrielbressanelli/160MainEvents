@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Piedmont Wine Dinner — 160 Main</title>
+    <meta name="description" content="RSVP for the Piedmont Wine Dinner at 160 Main. Wednesday, Nov 19 at 7:00 PM. $250 per person." />
+    <meta property="og:title" content="Piedmont Wine Dinner — 160 Main">
+    <meta property="og:description" content="RSVP for the Piedmont Wine Dinner at 160 Main. Wednesday, Nov 19 at 7:00 PM. $250 per person.">
+    <meta property="og:type" content="website">
+    <meta property="og:image" content="/images/hero-piedmont.png">
+    <link rel="icon" href="/favicon.ico" sizes="any">
+    <link rel="preload" as="image" href="/images/hero-piedmont.png">
+    <link rel="stylesheet" href="/styles.css" />
+    <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+  </head>
+  <body>
+    <header class="hero">
+      <div class="hero-overlay"></div>
+      <img src="/images/160Main-New.png" alt="160 Main" class="logo" />
+      <div class="hero-copy">
+        <h1>Piedmont Wine Dinner</h1>
+        <p class="subhead">Wednesday, Nov 19 at 7:00 PM · $250 per person</p>
+        <button class="cta" onclick="document.getElementById('rsvp').scrollIntoView({behavior:'smooth'})">Reserve Your Spot</button>
+      </div>
+    </header>
+
+    <main>
+      <section class="details">
+        <h2>About the Evening</h2>
+        <p>Join us for a multi‑course tasting menu paired with exceptional wines from Italy’s Piedmont. Seats are limited.</p>
+        <ul class="bullets">
+          <li>Location: 160 Main, Northville, MI</li>
+          <li>Time: Wednesday, Nov 19 @ 7:00 PM</li>
+          <li>Includes: curated wine pairings with each course</li>
+        </ul>
+      </section>
+
+      <section id="rsvp" class="card">
+        <h2>RSVP</h2>
+        <form id="rsvp-form" novalidate>
+          <div class="grid">
+            <label>
+              <span>First Name*</span>
+              <input type="text" name="first_name" required autocomplete="given-name" />
+              <small class="error" data-for="first_name"></small>
+            </label>
+            <label>
+              <span>Last Name*</span>
+              <input type="text" name="last_name" required autocomplete="family-name" />
+              <small class="error" data-for="last_name"></small>
+            </label>
+          </div>
+          <div class="grid">
+            <label>
+              <span>Phone*</span>
+              <input type="tel" name="phone" required inputmode="tel" placeholder="e.g., (248) 555‑1234" />
+              <small class="error" data-for="phone"></small>
+            </label>
+            <label>
+              <span>Email*</span>
+              <input type="email" name="email" required autocomplete="email" />
+              <small class="error" data-for="email"></small>
+            </label>
+          </div>
+          <fieldset class="inline">
+            <legend>Will you attend?*</legend>
+            <label class="radio"><input type="radio" name="will_attend" value="yes" required /> <span>Yes</span></label>
+            <label class="radio"><input type="radio" name="will_attend" value="no" /> <span>No</span></label>
+            <small class="error" data-for="will_attend"></small>
+          </fieldset>
+          <label>
+            <span>Attendance Notes</span>
+            <textarea name="notes" rows="4" placeholder="Dietary needs, seating requests, etc."></textarea>
+          </label>
+
+          <input type="hidden" name="utm_source" />
+          <input type="hidden" name="utm_medium" />
+          <input type="hidden" name="utm_campaign" />
+
+          <div class="cf-turnstile" data-sitekey="0x4AAAAAAB_eQ0EYUm3xAYSK"></div>
+
+          <button id="submit" type="submit" class="cta">Submit RSVP</button>
+          <div id="form-alert" class="alert" hidden></div>
+        </form>
+
+        <div id="success-yes" class="success" hidden>
+          <h3>You're in!</h3>
+          <p>We have your RSVP for Wednesday, Nov 19 at 7:00 PM. A confirmation email is on the way.</p>
+          <div class="calendar-links">
+            <a id="gcal" target="_blank" rel="noopener">Add to Google Calendar</a>
+            <a id="ics" download="Piedmont-Wine-Dinner.ics">Download .ics</a>
+          </div>
+        </div>
+
+        <div id="success-no" class="success" hidden>
+          <h3>Thanks for letting us know.</h3>
+          <p>Your response was recorded. If plans change, simply reply to the confirmation email.</p>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <p>160 Main · Northville, MI</p>
+      <p class="fine">We only use your information for this event. © 160 Main</p>
+    </footer>
+
+    <script src="/main.js" defer></script>
+  </body>
+</html>
