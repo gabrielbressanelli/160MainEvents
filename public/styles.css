@@ -250,3 +250,37 @@ fieldset.inline{ border:0; padding:0; margin:8px 0 12px }
   margin: 0 auto;
   max-width: 620px; /* adjust as needed */
 }
+
+/* Shared CTA style (used by #submit) */
+.cta{
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin: 12px auto 0;            /* centers inside the card */
+  min-width: 220px;
+  min-height: 44px;
+  padding: 14px 22px;
+  border: 0;
+  border-radius: 999px;
+  font-weight: 700;
+  text-decoration: none;
+  cursor: pointer;
+
+  background: linear-gradient(180deg, #c98b3e 0%, #a86a1f 100%);
+  color: #fff;
+  box-shadow: var(--cta-top-shadow);
+  transition: transform .12s ease, opacity .12s ease, filter .12s ease;
+}
+.cta:hover{ transform: scale(1.015) }
+.cta:active{ transform: scale(.985) }
+.cta:focus-visible{ outline: 3px solid #ffe3a3; outline-offset: 2px }
+
+/* Optional: full-width on small screens */
+@media (max-width: 420px){
+  .card .cta{ width: 100%; }
+}
+
+/* Keep hero button behavior; it already has class 'hero-cta' */
+.hero-cta{ position: absolute; left: 50%; transform: translateX(-50%); z-index: 2; }
+/* and your bottom offset rule from earlier */
