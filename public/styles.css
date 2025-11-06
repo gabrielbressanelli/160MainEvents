@@ -82,3 +82,101 @@ fieldset.inline{border:0; padding:0; margin:8px 0 12px}
 
 .footer{max-width:840px; margin:40px auto; padding:0 20px 40px 20px; text-align:center; color:var(--muted)}
 .fine{font-size:12px}
+
+/* --- Colors --- */
+:root{
+  --form-cream: #f6efe3;         /* cream card for the form */
+  --nav-cream:  #f6efe3;
+  --cta-top-shadow: 0 8px 18px rgba(0,0,0,.22);
+}
+
+/* --- Navbar --- */
+.topnav{
+  position: sticky; top: 0; z-index: 1000;
+  background: var(--nav-cream);
+  border-bottom: 1px solid var(--border);
+}
+.topnav-inner{
+  max-width: 980px; margin: 0 auto; padding: 10px 16px;
+  display: flex; align-items: center; justify-content: space-between;
+}
+.brand{ display:flex; align-items:center; gap:10px; text-decoration:none }
+.brand-logo{ height: 34px; width: auto; display:block }
+.nav-link{
+  color: var(--ink); text-decoration: none; font-weight: 600;
+}
+.nav-link:hover, .nav-link:focus{ text-decoration: underline }
+
+/* --- Hero brightness + reliable CTA tap target --- */
+.hero{
+  position: relative;
+  min-height: 70vh;
+  display: block;
+  background: url('/images/hero-piedmont.png') center/cover no-repeat;
+}
+.hero-overlay{
+  position: absolute; inset: 0;
+  pointer-events: none;               /* overlay will never block taps */
+  background: linear-gradient(
+    180deg,
+    rgba(0,0,0,.10) 0%,               /* lighter overall */
+    rgba(0,0,0,.25) 55%,
+    rgba(0,0,0,.50) 85%,
+    rgba(0,0,0,.60) 100%
+  );
+}
+.hero-cta{
+  position: absolute; left: 50%;
+  transform: translateX(-50%);
+  bottom: 28px;
+  z-index: 2;                         /* above overlay */
+  min-width: 220px; min-height: 44px;
+  background: linear-gradient(180deg, #c98b3e 0%, #a86a1f 100%);
+  color: #fff; font-weight: 700;
+  border: none; border-radius: 999px;
+  padding: 14px 22px; box-shadow: var(--cta-top-shadow);
+  transition: transform .12s ease, opacity .12s ease;
+}
+.hero-cta:hover{ transform: translateX(-50%) scale(1.02) }
+.hero-cta:active{ transform: translateX(-50%) scale(.98) }
+.hero-cta:focus-visible{ outline: 3px solid #ffe3a3; outline-offset: 2px }
+
+@supports (padding: max(0px)) {
+  .hero-cta{ bottom: max(28px, env(safe-area-inset-bottom)); }
+}
+
+/* --- Form: cream card, white fields --- */
+.card{
+  background: var(--form-cream);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 24px;
+  box-shadow: var(--shadow);
+}
+input, textarea, select{
+  background: #fff;             /* white inputs */
+  color: var(--ink);
+  border: 1.5px solid var(--border);
+}
+input::placeholder, textarea::placeholder{ color:#9aa1a8; opacity:1; }
+input:focus, textarea:focus, select:focus{
+  outline: 3px solid #e9d7a5; border-color: #c8a573;
+}
+
+/* --- Footer on white --- */
+.footer{
+  background: #fff;
+  border-top: 1px solid var(--border);
+}
+
+/* --- Mobile polish --- */
+@media (max-width: 480px){
+  .topnav-inner{ padding: 10px 14px }
+  main{ margin: 28px auto; padding: 0 16px }
+  .card, .details{ padding: 18px; border-radius: 14px }
+}
+
+/* Respect reduced motion */
+@media (prefers-reduced-motion: reduce){
+  .hero-cta{ transition: none }
+}

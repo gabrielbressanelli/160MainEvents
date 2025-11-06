@@ -15,9 +15,23 @@
     <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
   </head>
   <body>
+<!-- NAVBAR -->
+    <nav class="topnav" aria-label="Primary">
+      <div class="topnav-inner">
+        <a href="/" class="brand">
+          <img src="/images/160Main-New.png" alt="160 Main" class="brand-logo" />
+        </a>
+        <a class="nav-link" href="https://www.instagram.com/160_main" target="_blank" rel="noopener noreferrer">
+          Instagram
+        </a>
+      </div>
+    </nav>
+
+    <!-- HERO -->
     <header class="hero" aria-label="Piedmont Wine Dinner">
-      <div class="hero-overlay"></div>
-      <button class="cta hero-cta" onclick="document.getElementById('rsvp').scrollIntoView({behavior:'smooth'})">
+      <div class="hero-overlay" aria-hidden="true"></div>
+      <button class="cta hero-cta" type="button"
+        onclick="document.getElementById('rsvp').scrollIntoView({behavior:'smooth'})">
         Reserve Your Spot
       </button>
     </header>
