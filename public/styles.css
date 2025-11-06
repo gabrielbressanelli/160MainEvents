@@ -180,3 +180,7 @@ input:focus, textarea:focus, select:focus{
 @media (prefers-reduced-motion: reduce){
   .hero-cta{ transition: none }
 }
+
+.details{
+  background-color: rgba(88, 57, 39);
+}
