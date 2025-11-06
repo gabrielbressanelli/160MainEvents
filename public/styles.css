@@ -239,7 +239,7 @@ fieldset.inline{ border:0; padding:0; margin:8px 0 12px }
 
 .rsvp-band{
   background: var(--brown);
-  color: #fff; /* only affects any text outside the card */
+  color: rgba(0,0,0,.02); /* only affects any text outside the card */
   padding: 36px 0;
   padding-top: max(36px, env(safe-area-inset-top));
   padding-bottom: max(36px, env(safe-area-inset-bottom));
