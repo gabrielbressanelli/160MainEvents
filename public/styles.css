@@ -113,7 +113,7 @@ main{ max-width:840px; margin:40px auto; padding:0 20px }
 
 /* Details section — NOT a card; sits on brown */
 .details{
-  background: transparent;   /* no box background */
+  background: var(--brown);   /* no box background */
   border: 0; border-radius: 0; box-shadow: none;
   color: #fff;               /* readable on brown */
   padding: 24px 0;           /* vertical rhythm; container handles side padding */
