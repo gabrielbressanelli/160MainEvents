@@ -1,4 +1,3 @@
-:
 :root{
   --bg:#0b0d0f;
   --ink:#111;
@@ -7,93 +6,27 @@
   --muted:#667085;
   --border:#e6e2da;
   --shadow:0 10px 30px rgba(0,0,0,.18);
-}
 
-*{box-sizing:border-box}
-html,body{margin:0;padding:0}
-body{font-family: system-ui,-apple-system,Segoe UI,Roboto,Inter,Arial,sans-serif; color:var(--ink); background:var(--paper); line-height:1.5}
-
-.hero{
-  position:relative;
-  min-height:70vh;                /* a little taller to breathe */
-  display:block;
-  background:url('/images/hero-piedmont.png') center/cover no-repeat;
-}
-.hero-overlay{
-  position:absolute; inset:0;
-  /* slightly stronger gradient so the CTA stands out */
-  background:linear-gradient(180deg, rgba(0,0,0,.25) 0%, rgba(0,0,0,.55) 70%, rgba(0,0,0,.75) 100%);
-}
-.logo{
-  position:absolute; top:20px; left:50%; transform:translateX(-50%);
-  width:200px; max-width:60vw;
-  filter:drop-shadow(0 2px 6px rgba(0,0,0,.5));
-}
-.hero-cta{
-  position:absolute; left:50%; bottom:28px; transform:translateX(-50%);
-  background:var(--accent); color:#fff;
-  border:none; padding:14px 22px; border-radius:999px; font-weight:700;
-  box-shadow:var(--shadow);
-  transition:transform .12s ease, opacity .12s ease;
-}
-.hero-cta:hover{ transform:translateX(-50%) scale(1.02); }
-.hero-cta:active{ transform:translateX(-50%) scale(.98); }
-
-main{max-width:840px; margin:40px auto; padding:0 20px}
-.details{background: rgba(88, 57, 39); border:1px solid var(--border); border-radius:16px; padding:24px; box-shadow:var(--shadow); margin-bottom:24px}
-.details h2{margin:0 0 8px 0}
-.bullets{margin:12px 0 0 0; padding-left:20px}
-
-.card{background:white; border:1px solid var(--border); border-radius:16px; padding:24px; box-shadow:var(--shadow)}
-.card h2{margin-top:0}
-
-.grid{display:grid; gap:16px}
-@media(min-width:720px){ .grid{grid-template-columns:1fr 1fr}}
-
-label{display:flex; flex-direction:column; gap:6px; margin-bottom:14px}
-input, textarea, select{
-  width:100%;
-  padding:12px 14px;
-  border:1.5px solid var(--border);
-  border-radius:10px;
-  font-size:16px;
-  background:#fff;                 /* no translucency */
-  color:var(--ink);
-  box-shadow: inset 0 1px 0 rgba(0,0,0,.02);
-}
-input::placeholder, textarea::placeholder{ color:#9aa1a8; opacity:1; }
-input:focus, textarea:focus, select:focus{
-  outline:3px solid #e9d7a5;       /* clear focus ring */
-  border-color:#c8a573;
-}
-
-fieldset.inline{border:0; padding:0; margin:8px 0 12px}
-.radio{
-  display:inline-flex; align-items:center; gap:8px; margin-right:18px;
-  padding:6px 10px; border-radius:8px;
-}
-.radio input{ width:18px; height:18px }
-.error{color:#b42318; min-height:18px}
-.alert{margin-top:12px; padding:12px; border-radius:10px; background:#fff7ed; border:1px solid #fed7aa; color:#7c2d12}
-.success{padding:20px; border-radius:12px; background:#eff8ff; border:1px solid #bfdbfe; margin-top:8px}
-
-.calendar-links{display:flex; gap:12px; margin-top:12px}
-.calendar-links a{padding:10px 14px; border-radius:999px; border:1px solid var(--border); text-decoration:none; color:var(--ink)}
-
-.footer{max-width:840px; margin:40px auto; padding:0 20px 40px 20px; text-align:center; color:var(--muted)}
-.fine{font-size:12px}
-
-/* --- Colors --- */
-:root{
-  --form-cream: #f6efe3;         /* cream card for the form */
-  --nav-cream:  #f6efe3;
+  --brown: rgb(88 57 39);     /* page background */
+  --form-cream:#f6efe3;       /* shared cream for navbar + form card */
+  --nav-cream:#f6efe3;
   --cta-top-shadow: 0 8px 18px rgba(0,0,0,.22);
 }
 
-/* --- Navbar --- */
+/* Base */
+*{ box-sizing:border-box }
+html,body{ margin:0; padding:0 }
+body{
+  font-family: system-ui,-apple-system,Segoe UI,Roboto,Inter,Arial,sans-serif;
+  color: var(--ink);
+  background: var(--brown);        /* entire page on brown */
+  line-height: 1.5;
+}
+
+/* Navbar */
 .topnav{
   position: sticky; top: 0; z-index: 1000;
-  background: var(--nav-cream);
+  background: var(--nav-cream);    /* cream to match form card */
   border-bottom: 1px solid var(--border);
 }
 .topnav-inner{
@@ -102,33 +35,27 @@ fieldset.inline{border:0; padding:0; margin:8px 0 12px}
 }
 .brand{ display:flex; align-items:center; gap:10px; text-decoration:none }
 .brand-logo{ height: 34px; width: auto; display:block }
+
+/* Instagram icon link */
 .nav-link{
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 40px;                    /* generous tap target */
-  height: 40px;
-  padding: 6px;                   /* inner breathing room */
+  width: 40px; height: 40px;
+  padding: 6px;
   border-radius: 8px;
-  text-decoration: none;          /* no underline for icon */
+  text-decoration: none;
   color: inherit;
 }
-
 .nav-link:focus-visible{
-  outline: 3px solid #c8a573;     /* brand-ish focus */
-  outline-offset: 2px;
+  outline: 3px solid #c8a573; outline-offset: 2px;
 }
-
-/* Icon image itself */
 .instagram-logo{
   display: block;
-  width: 28px;
-  height: 28px;
-  object-fit: contain;            /* preserve aspect */
+  width: 28px; height: 28px;
+  object-fit: contain;
   image-rendering: -webkit-optimize-contrast;
 }
-
-/* Hover/active states (subtle) */
 @media (hover: hover){
   .nav-link:hover .instagram-logo{
     filter: brightness(1.05) contrast(1.05);
@@ -140,12 +67,7 @@ fieldset.inline{border:0; padding:0; margin:8px 0 12px}
   filter: brightness(.97);
 }
 
-/* If your topnav uses tight vertical padding on mobile, keep target comfy */
-@media (max-width: 480px){
-  .nav-link{ width: 44px; height: 44px; padding: 8px; }
-}
-
-/* --- Hero brightness + reliable CTA tap target --- */
+/* Hero */
 .hero{
   position: relative;
   min-height: 70vh;
@@ -154,20 +76,23 @@ fieldset.inline{border:0; padding:0; margin:8px 0 12px}
 }
 .hero-overlay{
   position: absolute; inset: 0;
-  pointer-events: none;               /* overlay will never block taps */
+  pointer-events: none;             /* never block taps */
   background: linear-gradient(
     180deg,
-    rgba(0,0,0,.10) 0%,               /* lighter overall */
+    rgba(0,0,0,.10) 0%,
     rgba(0,0,0,.25) 55%,
     rgba(0,0,0,.50) 85%,
     rgba(0,0,0,.60) 100%
   );
 }
+.logo{
+  position:absolute; top:20px; left:50%; transform:translateX(-50%);
+  width:200px; max-width:60vw;
+  filter: drop-shadow(0 2px 6px rgba(0,0,0,.5));
+}
 .hero-cta{
-  position: absolute; left: 50%;
-  transform: translateX(-50%);
-  bottom: 28px;
-  z-index: 2;                         /* above overlay */
+  position: absolute; left: 50%; transform: translateX(-50%);
+  bottom: 28px; z-index: 2;
   min-width: 220px; min-height: 44px;
   background: linear-gradient(180deg, #c98b3e 0%, #a86a1f 100%);
   color: #fff; font-weight: 700;
@@ -178,113 +103,88 @@ fieldset.inline{border:0; padding:0; margin:8px 0 12px}
 .hero-cta:hover{ transform: translateX(-50%) scale(1.02) }
 .hero-cta:active{ transform: translateX(-50%) scale(.98) }
 .hero-cta:focus-visible{ outline: 3px solid #ffe3a3; outline-offset: 2px }
-
-@supports (padding: max(0px)) {
+@supports (padding: max(0px)){
   .hero-cta{ bottom: max(28px, env(safe-area-inset-bottom)); }
 }
 
-/* --- Form: cream card, white fields --- */
+/* Layout container */
+main{ max-width:840px; margin:40px auto; padding:0 20px }
+
+/* Details section — NOT a card; sits on brown */
+.details{
+  background: transparent;   /* no box background */
+  border: 0; border-radius: 0; box-shadow: none;
+  color: #fff;               /* readable on brown */
+  padding: 24px 0;           /* vertical rhythm; container handles side padding */
+}
+.details h2{ margin:0 0 8px 0; color:#fff }
+.bullets{ margin:12px 0 0 0; padding-left:20px }
+.bullets li::marker{ color: rgba(255,255,255,.7) }
+
+/* RSVP card — cream */
 .card{
-  background: var(--form-cream);
+  background: var(--form-cream);  /* cream to match navbar */
   border: 1px solid var(--border);
   border-radius: 16px;
   padding: 24px;
   box-shadow: var(--shadow);
 }
+.card h2{ margin-top:0 }
+
+/* Form controls */
+.grid{ display:grid; gap:16px }
+@media (min-width:720px){ .grid{ grid-template-columns:1fr 1fr } }
+
+label{ display:flex; flex-direction:column; gap:6px; margin-bottom:14px }
 input, textarea, select{
-  background: #fff;             /* white inputs */
-  color: var(--ink);
-  border: 1.5px solid var(--border);
+  width:100%;
+  padding:12px 14px;
+  border:1.5px solid var(--border);
+  border-radius:10px;
+  font-size:16px;
+  background:#fff; color:var(--ink);
+  box-shadow: inset 0 1px 0 rgba(0,0,0,.02);
 }
-input::placeholder, textarea::placeholder{ color:#9aa1a8; opacity:1; }
+input::placeholder, textarea::placeholder{ color:#9aa1a8; opacity:1 }
 input:focus, textarea:focus, select:focus{
-  outline: 3px solid #e9d7a5; border-color: #c8a573;
+  outline:3px solid #e9d7a5; border-color:#c8a573;
+}
+fieldset.inline{ border:0; padding:0; margin:8px 0 12px }
+.radio{ display:inline-flex; align-items:center; gap:8px; margin-right:18px; padding:6px 10px; border-radius:8px }
+.radio input{ width:18px; height:18px }
+.error{ color:#b42318; min-height:18px }
+.alert{
+  margin-top:12px; padding:12px; border-radius:10px;
+  background:#fff7ed; border:1px solid #fed7aa; color:#7c2d12;
+}
+.success{
+  padding:20px; border-radius:12px;
+  background:#eff8ff; border:1px solid #bfdbfe; margin-top:8px;
+}
+.calendar-links{ display:flex; gap:12px; margin-top:12px }
+.calendar-links a{
+  padding:10px 14px; border-radius:999px; border:1px solid var(--border);
+  text-decoration:none; color:var(--ink);
 }
 
-/* --- Footer on white --- */
+/* Footer — white */
 .footer{
-  background: #fff;
-  border-top: 1px solid var(--border);
+  background:#fff;
+  border-top:1px solid var(--border);
+  max-width:840px; margin:40px auto;
+  padding:0 20px 40px 20px;
+  text-align:center; color:var(--muted);
+}
+.fine{ font-size:12px }
+
+/* Mobile polish */
+@media (max-width:480px){
+  .topnav-inner{ padding:10px 14px }
+  main{ margin:28px auto; padding:0 16px }
+  .card{ padding:18px; border-radius:14px }
 }
 
-/* --- Mobile polish --- */
-@media (max-width: 480px){
-  .topnav-inner{ padding: 10px 14px }
-  main{ margin: 28px auto; padding: 0 16px }
-  .card, .details{ padding: 18px; border-radius: 14px }
-}
-
-/* Respect reduced motion */
+/* Reduced motion */
 @media (prefers-reduced-motion: reduce){
-  .hero-cta{ transition: none }
-}
-
-/* --- Details card: true brown background, no white edge --- */
-.details{
-  /* use rgb(...) or rgba(...,1); your previous rgba(...) was invalid */
-  background: rgb(88 57 39) !important;     /* solid brown */
-  border: none !important;                   /* remove the light border ring */
-  box-shadow: 0 10px 30px rgba(0,0,0,.22);   /* slightly stronger shadow for contrast */
-  color: #fff;                               /* readable text on brown */
-}
-
-/* Brand brown token */
-:root{
-  --brown: rgb(88 57 39);
-}
-
-/* 1) DETAILS = full-bleed brown band (no white rim) */
-.details{
-  position: relative;
-  background: none !important;      /* kill local white/brown box bg */
-  border: 0 !important;
-  border-radius: 0 !important;
-  padding: 32px 20px;               /* inner breathing room */
-  color: #fff;                      /* readable on brown */
-}
-.details::before{
-  content: "";
-  position: absolute;
-  z-index: -1;
-  left: 50%;
-  transform: translateX(-50%);
-  top: 0; bottom: 0;
-  width: 100vw;                     /* FULL-BLEED BACKGROUND */
-  background: var(--brown);
-}
-.details h2{ color:#fff; }
-.details a{ color:#ffe3a3; text-decoration: underline; }
-.details a:hover{ text-decoration: none; }
-
-/* 2) RSVP CARD = cream card with the SAME brown as its surrounding band */
-#rsvp{
-  position: relative;               /* anchor the band */
-  background: var(--form-cream);    /* your cream card stays */
-  border: 1px solid var(--border);
-  border-radius: 16px;
-  box-shadow: var(--shadow);
-  margin: 32px auto;                /* space from the brown band edges */
-}
-#rsvp::before{
-  content: "";
-  position: absolute;
-  z-index: -1;
-  left: 50%;
-  transform: translateX(-50%);
-  /* extend the brown beyond the card so the "padding" around the card is brown,
-     not white. Adjust the +/- values if you want thicker/thinner band */
-  top: -24px;                       /* brown above card */
-  bottom: -24px;                    /* brown below card */
-  width: 100vw;                     /* FULL-BLEED */
-  background: var(--brown);
-  border: 0;
-  border-radius: 0;
-}
-
-/* Optional: ensure the main container doesn't visually fight the bands */
-main{ position: relative; z-index: 0; }
-
-/* Keep inputs white inside the cream card */
-#rsvp input, #rsvp textarea, #rsvp select{
-  background: #fff;
+  .hero-cta{ transition:none }
 }
