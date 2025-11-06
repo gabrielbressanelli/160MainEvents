@@ -212,3 +212,22 @@ fieldset.inline{ border:0; padding:0; margin:8px 0 12px }
 @media (prefers-reduced-motion: reduce){
   .hero-cta{ transition:none }
 }
+
+/* Remove gap between the hero and the details band */
+.hero + main { margin-top: 0; }
+
+/* Center the content within the brown band */
+.details .section-inner{
+  text-align: center;
+  max-width: 760px;   /* keeps lines readable */
+  padding: 0 20px;    /* mirrors main side padding */
+}
+
+/* Keep bullets tidy while the overall block is centered */
+.details .bullets{
+  list-style-position: inside;
+  padding-left: 0;
+  margin: 12px auto 0 auto;
+  display: inline-block;   /* centers the list block while bullets stay aligned */
+  text-align: left;        /* preserves easy scanning of bullet text */
+}
