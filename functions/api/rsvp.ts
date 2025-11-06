@@ -126,7 +126,6 @@ app.post('/', async (c) => {
     'END:VCALENDAR'
   ].join('\r\n');
   const icsB64 = btoa(ics);
-  const site = c.env.SITE_ORIGIN || '';
   const icsUrl = `${site}/api/ics/${id}.ics?d=${icsB64}`;
 
   return c.json({ ok:true, id, gcalUrl: gcalUrl.toString(), icsUrl });
