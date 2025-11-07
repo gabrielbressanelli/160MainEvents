@@ -129,7 +129,7 @@ export const onRequestPost: PagesFunction<Env> = async (ctx) => {
   </p>
 
   <p>
-    We will have more information coming soon, stay tuned to you email!  
+    We will have more information coming out soon, stay tuned to your email!  
   </p>
 
   <div style="margin:16px 0; padding:12px; background:#f7f9fc; border-radius:10px;">
@@ -183,10 +183,6 @@ export const onRequestPost: PagesFunction<Env> = async (ctx) => {
     <li><strong>Phone:</strong> ${escapeHtml(phone)}</li>
     <li><strong>Attend:</strong> ${escapeHtml(will_attend)}</li>
     <li><strong>Notes:</strong> ${notes ? escapeHtml(notes) : '(none)'}</li>
-    <li><strong>UTM:</strong> ${escapeHtml(utm_source)}/${escapeHtml(utm_medium)}/${escapeHtml(utm_campaign)}</li>
-    <li><strong>IP:</strong> ${escapeHtml(ip)}</li>
-    <li><strong>UA:</strong> ${escapeHtml(ua)}</li>
-    <li><strong>ID:</strong> ${escapeHtml(id)}</li>
   </ul>
 </div>`.trim();
 
