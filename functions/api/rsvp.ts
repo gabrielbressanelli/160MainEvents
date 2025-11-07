@@ -113,11 +113,48 @@ export const onRequestPost: PagesFunction<Env> = async (ctx) => {
     `If your plans change, reply to this email.`,
   ].filter(Boolean).join('\n');
 
-  const jsonMail = (to: string, subject: string, text: string) => ({
+  // Simple HTML version with same “feel” (logo, headings, inline styles)
+  const htmlGuest = `
+<div style="font-family: Arial, sans-serif; color: #333; line-height:1.6;">
+  <img src="https://onesixtymain.com/wp-content/uploads/2023/06/160Main-New.png"
+       alt="One Sixty Main Logo"
+       style="max-width: 200px; margin-bottom: 20px;">
+  <h2 style="color:#2c3e50; margin:0 0 8px;">
+    ${will_attend.toLowerCase() === 'yes' ? '🍷 RSVP Confirmed' : '🍷 RSVP Received'}
+  </h2>
+  <p style="margin:0 0 12px;">
+    Hi <strong>${escapeHtml(first_name)}</strong>, we
+    ${will_attend.toLowerCase() === 'yes' ? 'look forward to seeing you' : 'have recorded your response'}
+    for the <strong>Piedmont Wine Dinner</strong>.
+  </p>
+
+  <p>
+    We will have more information coming soon, stay tuned to you email!  
+  </p>
+
+  <div style="margin:16px 0; padding:12px; background:#f7f9fc; border-radius:10px;">
+    <p style="margin:0 0 6px;"><strong>Guest:</strong> ${escapeHtml(first_name)} ${escapeHtml(last_name)}</p>
+    <p style="margin:0 0 6px;"><strong>Email:</strong> ${escapeHtml(email)}</p>
+    <p style="margin:0 0 6px;"><strong>Phone:</strong> ${escapeHtml(phone)}</p>
+    <p style="margin:0 0 6px;"><strong>Attendance:</strong> ${escapeHtml(will_attend)}</p>
+    ${notes ? `<p style="margin:0 0 6px;"><strong>Notes:</strong> ${escapeHtml(notes)}</p>` : ''}
+  </div>
+
+  <h3 style="color:#2c3e50; margin:18px 0 10px;">Event Details</h3>
+  <p style="margin:0 0 6px;"><strong>Date:</strong> Wed Nov 19 at 7:00 PM</p>
+  <p style="margin:0 0 6px;"><strong>Location:</strong> 160 Main, Northville, MI</p>
+
+  <p style="margin-top: 24px;">– <em>160 Main Events</em></p>
+</div>`.trim();
+
+  const jsonMail = (to: string, subject: string, text: string, html?: string) => ({
     personalizations: [{ to: [{ email: to }] }],
     from: { email: from, name: '160 Main Events' },
     subject,
-    content: [{ type: 'text/plain', value: text }],
+    content: [
+      { type: 'text/plain', value: text },
+      ...(html ? [{ type: 'text/html', value: html }] : []),
+    ],
   });
 
   if (env.SENDGRID_API_KEY) {
@@ -126,21 +163,37 @@ export const onRequestPost: PagesFunction<Env> = async (ctx) => {
       'Content-Type': 'application/json',
     };
 
-    // Guest
+    // Guest (text + html)
     await fetch('https://api.sendgrid.com/v3/mail/send', {
       method: 'POST',
       headers,
-      body: JSON.stringify(jsonMail(email, subjectGuest, textGuest)),
+      body: JSON.stringify(jsonMail(email, subjectGuest, textGuest, htmlGuest)),
     }).catch(() => {});
 
-    // Internal
+    // Internal (text + html)
     const textInternal =
       `New RSVP:\n${first_name} ${last_name}\n${email}\n${phone}\nAttend: ${will_attend}\nNotes: ${notes || '(none)'}\nUTM: ${utm_source}/${utm_medium}/${utm_campaign}\n`;
 
+    const htmlInternal = `
+<div style="font-family: Arial, sans-serif; color:#333; line-height:1.6;">
+  <h2 style="color:#2c3e50; margin:0 0 8px;">New RSVP — Piedmont Wine Dinner</h2>
+  <ul style="margin:0; padding-left:18px;">
+    <li><strong>Name:</strong> ${escapeHtml(first_name)} ${escapeHtml(last_name)}</li>
+    <li><strong>Email:</strong> ${escapeHtml(email)}</li>
+    <li><strong>Phone:</strong> ${escapeHtml(phone)}</li>
+    <li><strong>Attend:</strong> ${escapeHtml(will_attend)}</li>
+    <li><strong>Notes:</strong> ${notes ? escapeHtml(notes) : '(none)'}</li>
+    <li><strong>UTM:</strong> ${escapeHtml(utm_source)}/${escapeHtml(utm_medium)}/${escapeHtml(utm_campaign)}</li>
+    <li><strong>IP:</strong> ${escapeHtml(ip)}</li>
+    <li><strong>UA:</strong> ${escapeHtml(ua)}</li>
+    <li><strong>ID:</strong> ${escapeHtml(id)}</li>
+  </ul>
+</div>`.trim();
+
     await fetch('https://api.sendgrid.com/v3/mail/send', {
       method: 'POST',
       headers,
-      body: JSON.stringify(jsonMail(internalTo, 'New RSVP — Piedmont Wine Dinner', textInternal)),
+      body: JSON.stringify(jsonMail(internalTo, 'New RSVP — Piedmont Wine Dinner', textInternal, htmlInternal)),
     }).catch(() => {});
   }
 
@@ -210,4 +263,14 @@ function json(data: unknown, status = 200) {
       'Access-Control-Allow-Origin': '*',
     },
   });
+}
+
+// Minimal HTML escaping for email fields
+function escapeHtml(s: string) {
+  return String(s)
+    .replaceAll('&', '&amp;')
+    .replaceAll('<', '&lt;')
+    .replaceAll('>', '&gt;')
+    .replaceAll('"', '&quot;')
+    .replaceAll("'", '&#39;');
 }
