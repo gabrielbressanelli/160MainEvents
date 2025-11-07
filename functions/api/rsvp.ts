@@ -142,7 +142,7 @@ export const onRequestPost: PagesFunction<Env> = async (ctx) => {
 
   <h3 style="color:#2c3e50; margin:18px 0 10px;">Event Details</h3>
   <p style="margin:0 0 6px;"><strong>Date:</strong> Wed Nov 19 at 7:00 PM</p>
-  <p style="margin:0 0 6px;"><strong>Location:</strong> 160 Main, Northville, MI</p>
+  <p style="margin:0 0 6px;"><strong>Location:</strong> 160 E Main St, Northville, MI</p>
 
   <p style="margin-top: 24px;">– <em>160 Main Events</em></p>
 </div>`.trim();
