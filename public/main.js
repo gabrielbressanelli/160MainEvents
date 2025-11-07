@@ -1,3 +1,4 @@
+// public/main.js
 (() => {
   const form = document.getElementById('rsvp-form');
   const submitBtn = document.getElementById('submit');
@@ -7,6 +8,9 @@
   const gcalLink = document.getElementById('gcal');
   const icsLink  = document.getElementById('ics');
 
+  if (!form) return;
+
+  // UTM autofill from query string
   const params = new URLSearchParams(location.search);
   ['utm_source','utm_medium','utm_campaign'].forEach(k => {
     const el = form.querySelector(`input[name="${k}"]`);
@@ -21,10 +25,10 @@
   function validate() {
     let ok = true;
     setError('first_name',''); setError('last_name',''); setError('phone',''); setError('email',''); setError('will_attend','');
-    const fn = form.first_name.value.trim();
-    const ln = form.last_name.value.trim();
-    const ph = form.phone.value.trim();
-    const em = form.email.value.trim();
+    const fn = (form.first_name?.value || '').trim();
+    const ln = (form.last_name?.value || '').trim();
+    const ph = (form.phone?.value || '').trim();
+    const em = (form.email?.value || '').trim();
     const attend = form.querySelector('input[name="will_attend"]:checked');
 
     if (!fn){ setError('first_name','Please enter your first name.'); ok=false; }
@@ -44,29 +48,42 @@
 
     try{
       const data = Object.fromEntries(new FormData(form).entries());
-      const res = await fetch('/api/rsvp',{
+
+      // Same-origin absolute URL is safest (avoids base tag quirks)
+      const url = `${location.origin}/api/rsvp`;
+
+      const res = await fetch(url, {
         method:'POST',
         headers:{'Content-Type':'application/json'},
         body: JSON.stringify(data),
       });
-      const json = await res.json();
-      if (!res.ok || !json.ok) throw new Error(json.error || 'Submission failed');
 
-      if (json.icsUrl) icsLink.href = json.icsUrl;
-      if (json.gcalUrl) gcalLink.href = json.gcalUrl;
+      // If the function returned a non-2xx, surface message from JSON if any
+      let json = {};
+      try { json = await res.json(); } catch { /* ignore */ }
+      if (!res.ok || !json || json.ok === false) {
+        const msg = (json && json.error) ? json.error : `Submission failed (${res.status})`;
+        throw new Error(msg);
+      }
+
+      // Safely attach links (guard for undefined)
+      if (json.icsUrl && icsLink) icsLink.href = String(json.icsUrl);
+      if (json.gcalUrl && gcalLink) gcalLink.href = String(json.gcalUrl);
 
       form.hidden = true;
-      if ((data.will_attend || '').toLowerCase() === 'yes'){
+      const attend = String(data.will_attend || '').toLowerCase();
+      if (attend === 'yes') {
         successYes.hidden = false;
       } else {
         successNo.hidden = false;
       }
     }catch(err){
       alertBox.hidden = false;
-      alertBox.textContent = err.message || 'Something went wrong. Please try again.';
+      alertBox.textContent = err?.message || 'Something went wrong. Please try again.';
     }finally{
       submitBtn.disabled = false; submitBtn.textContent = 'Submit RSVP';
     }
   }
+
   form.addEventListener('submit', onSubmit);
 })();

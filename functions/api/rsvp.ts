@@ -1,3 +1,4 @@
+// functions/api/rsvp.ts
 import { Hono } from 'hono';
 
 export interface Env {
@@ -8,66 +9,91 @@ export interface Env {
   INTERNAL_NOTIFY_TO?: string;
   EVENT_SLUG?: string;
   EXPORT_TOKEN?: string;
-  SITE_ORIGIN?: string; // comma-separated allow-list, e.g. "https://events.160maincarryout.com,https://160maincarryout.com"
+  SITE_ORIGIN?: string; // e.g. "https://events.160maincarryout.com" (no trailing slash)
 }
 
 const app = new Hono<{ Bindings: Env }>();
 
 /**
- * Basic preflight support (useful if you ever switch to cross-origin POSTs)
+ * Utility: strict same-origin check with an allowlist for preview/dev.
+ */
+function isOriginAllowed(origin: string, site: string) {
+  if (!site) return true; // no restriction if not configured
+  if (!origin) return true; // some agents omit Origin (robots, curl)
+  if (origin === site) return true;
+  // Allow local/dev/preview if you want (optional):
+  if (origin.endsWith('.pages.dev')) return true;
+  if (origin.startsWith('http://localhost:')) return true;
+  return false;
+}
+
+/**
+ * CORS / preflight: handle OPTIONS explicitly to avoid 405 during preflight.
+ * (Same-origin requests usually don’t need this, but it’s harmless and fixes edge cases.)
  */
 app.options('/', (c) => {
-  const origin = c.req.header('origin') || '';
-  const allow = allowedOrigin(origin, c.env.SITE_ORIGIN);
-  if (allow) {
-    c.header('Access-Control-Allow-Origin', origin);
-    c.header('Vary', 'Origin');
-  }
-  c.header('Access-Control-Allow-Methods', 'POST, OPTIONS');
-  c.header('Access-Control-Allow-Headers', 'Content-Type');
-  return c.body(null, 204);
+  return new Response(null, {
+    status: 204,
+    headers: {
+      'Access-Control-Allow-Origin': c.req.header('origin') || '*',
+      'Access-Control-Allow-Methods': 'POST, OPTIONS',
+      'Access-Control-Allow-Headers': 'content-type',
+      'Vary': 'Origin',
+    },
+  });
 });
 
 app.post('/', async (c) => {
-  // Origin enforcement: only block when we *know* it’s a foreign origin
   const origin = c.req.header('origin') || '';
-  const siteList = c.env.SITE_ORIGIN || '';
-  if (origin && !allowedOrigin(origin, siteList)) {
+  const site = (c.env.SITE_ORIGIN || '').replace(/\/$/, ''); // normalize (no trailing slash)
+
+  if (!isOriginAllowed(origin, site)) {
     return c.json({ ok: false, error: 'Origin not allowed' }, 403);
   }
-  if (origin) {
-    c.header('Access-Control-Allow-Origin', origin);
-    c.header('Vary', 'Origin');
+
+  let body: any = {};
+  try {
+    body = await c.req.json();
+  } catch {
+    // If JSON parse fails, return 400
+    return c.json({ ok: false, error: 'Invalid JSON body' }, 400);
   }
 
-  // Parse/validate body
-  const body = await c.req.json().catch(() => ({} as Record<string, string>));
   const {
-    first_name = '', last_name = '', phone = '', email = '',
-    will_attend = '', notes = '',
-    utm_source = '', utm_medium = '', utm_campaign = '',
-    ['cf-turnstile-response']: turnstileToken
+    first_name = '',
+    last_name = '',
+    phone = '',
+    email = '',
+    will_attend = '',
+    notes = '',
+    utm_source = '',
+    utm_medium = '',
+    utm_campaign = '',
+    ['cf-turnstile-response']: turnstileToken,
   } = body;
 
+  // Basic validation
   if (!first_name || !last_name || !phone || !email || !will_attend) {
-    return c.json({ ok:false, error:'Missing required fields' }, 400);
+    return c.json({ ok: false, error: 'Missing required fields' }, 400);
   }
   const emailOk = /[^@\s]+@[^@\s]+\.[^@\s]+/.test(email);
-  if (!emailOk) return c.json({ ok:false, error:'Invalid email' }, 400);
+  if (!emailOk) {
+    return c.json({ ok: false, error: 'Invalid email' }, 400);
+  }
 
-  // Verify Turnstile when configured
+  // Turnstile verify (if configured)
   if (c.env.TURNSTILE_SECRET) {
     const verifyRes = await fetch('https://challenges.cloudflare.com/turnstile/v0/siteverify', {
       method: 'POST',
       body: new URLSearchParams({
         secret: c.env.TURNSTILE_SECRET,
         response: turnstileToken || '',
-        remoteip: c.req.header('cf-connecting-ip') || ''
-      })
+        remoteip: c.req.header('cf-connecting-ip') || '',
+      }),
     });
-    const verifyJSON = await verifyRes.json().catch(() => ({}));
-    if (!verifyJSON.success) {
-      return c.json({ ok:false, error:'Captcha failed' }, 400);
+    const verifyJSON = await verifyRes.json().catch(() => ({} as any));
+    if (!verifyJSON?.success) {
+      return c.json({ ok: false, error: 'Captcha failed' }, 400);
     }
   }
 
@@ -78,85 +104,103 @@ app.post('/', async (c) => {
   const id = crypto.randomUUID();
   const now = new Date().toISOString();
 
-  try {
-    await c.env.DB.prepare(
-      `INSERT INTO rsvps
-        (id, created_at, event_slug, first_name, last_name, phone, email, will_attend, notes, ip, user_agent, utm_source, utm_medium, utm_campaign)
-       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
-    ).bind(
-      id, now, event_slug, first_name, last_name, phone, email, will_attend, notes, ip, ua, utm_source, utm_medium, utm_campaign
-    ).run();
-  } catch (e) {
-    return c.json({ ok:false, error:'Database error' }, 500);
-  }
+  // Persist to D1
+  await c.env.DB.prepare(
+    `INSERT INTO rsvps
+      (id, created_at, event_slug, first_name, last_name, phone, email, will_attend, notes, ip, user_agent, utm_source, utm_medium, utm_campaign)
+     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
+  )
+    .bind(
+      id,
+      now,
+      event_slug,
+      first_name,
+      last_name,
+      phone,
+      email,
+      will_attend,
+      notes,
+      ip,
+      ua,
+      utm_source,
+      utm_medium,
+      utm_campaign
+    )
+    .run();
 
-  // Email notifications (optional)
+  // Email notifications (SendGrid) — optional
   const from = c.env.FROM_EMAIL || 'events@example.com';
   const internalTo = c.env.INTERNAL_NOTIFY_TO || 'events@example.com';
 
-  const subjectGuest = `160 Main — ${will_attend.toLowerCase()==='yes' ? 'RSVP Confirmed' : 'RSVP Received'} — Piedmont Wine Dinner`;
+  const subjectGuest = `160 Main — ${
+    will_attend.toLowerCase() === 'yes' ? 'RSVP Confirmed' : 'RSVP Received'
+  } — Piedmont Wine Dinner`;
+
   const textGuest = [
     `Hi ${first_name},`,
     ``,
-    `We ${will_attend.toLowerCase()==='yes' ? 'look forward to seeing you' : 'received your response'} for the Piedmont Wine Dinner.`,
+    `We ${
+      will_attend.toLowerCase() === 'yes' ? 'look forward to seeing you' : 'received your response'
+    } for the Piedmont Wine Dinner.`,
     `Date: Wed Nov 19 at 7:00 PM`,
     `Location: 160 Main, Northville, MI`,
     notes ? `Notes: ${notes}` : '',
     ``,
-    `If your plans change, reply to this email.`
-  ].filter(Boolean).join('\n');
-
-  const textInternal = [
-    `New RSVP:`,
-    `${first_name} ${last_name}`,
-    `${email}`,
-    `${phone}`,
-    `Attend: ${will_attend}`,
-    `Notes: ${notes || '(none)'}`,
-    `UTM: ${utm_source}/${utm_medium}/${utm_campaign}`,
-  ].join('\n');
+    `If your plans change, reply to this email.`,
+  ]
+    .filter(Boolean)
+    .join('\n');
 
   const jsonMail = (to: string, subject: string, text: string) => ({
     personalizations: [{ to: [{ email: to }] }],
     from: { email: from, name: '160 Main Events' },
     subject,
-    content: [{ type: 'text/plain', value: text }]
+    content: [{ type: 'text/plain', value: text }],
   });
 
   if (c.env.SENDGRID_API_KEY) {
-    const hdrs = {
-      'Authorization': `Bearer ${c.env.SENDGRID_API_KEY}`,
-      'Content-Type': 'application/json'
-    };
-    // fire-and-forget; don't fail request if email API hiccups
-    await Promise.allSettled([
-      fetch('https://api.sendgrid.com/v3/mail/send', {
-        method:'POST', headers: hdrs,
-        body: JSON.stringify(jsonMail(email, subjectGuest, textGuest))
-      }),
-      fetch('https://api.sendgrid.com/v3/mail/send', {
-        method:'POST', headers: hdrs,
-        body: JSON.stringify(jsonMail(internalTo, 'New RSVP — Piedmont Wine Dinner', textInternal))
-      })
-    ]);
+    await fetch('https://api.sendgrid.com/v3/mail/send', {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${c.env.SENDGRID_API_KEY}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(jsonMail(email, subjectGuest, textGuest)),
+    });
+
+    const textInternal = `New RSVP:
+${first_name} ${last_name}
+${email}
+${phone}
+Attend: ${will_attend}
+Notes: ${notes || '(none)'}
+UTM: ${utm_source}/${utm_medium}/${utm_campaign}
+`;
+    await fetch('https://api.sendgrid.com/v3/mail/send', {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${c.env.SENDGRID_API_KEY}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(jsonMail(internalTo, 'New RSVP — Piedmont Wine Dinner', textInternal)),
+    });
   }
 
-  /**
-   * Calendar links
-   * Wed Nov 19, 2025 7:00–9:00 PM America/Detroit (EST) => 2025-11-20 00:00–02:00Z
-   */
+  // Calendar links
   const title = 'Piedmont Wine Dinner — 160 Main';
   const details = 'Multi-course tasting menu paired with Piedmont wines.';
   const location = '160 Main, Northville, MI';
-  const startZ = '20251120T000000Z';
-  const endZ   = '20251120T020000Z';
+
+  // NOTE: use local time for event (7–9pm ET is 00:00–02:00Z next day in UTC if DST differs).
+  const start = '20251120T000000Z'; // 7:00 PM ET on Nov 19, 2025 is 00:00Z on Nov 20
+  const end = '20251120T020000Z';
 
   const gcalUrl = new URL('https://calendar.google.com/calendar/render');
-  gcalUrl.searchParams.set('action','TEMPLATE');
+  gcalUrl.searchParams.set('action', 'TEMPLATE');
   gcalUrl.searchParams.set('text', title);
   gcalUrl.searchParams.set('details', details);
   gcalUrl.searchParams.set('location', location);
-  gcalUrl.searchParams.set('dates', `${startZ}/${endZ}`);
+  gcalUrl.searchParams.set('dates', `${start}/${end}`);
 
   const ics = [
     'BEGIN:VCALENDAR',
@@ -164,33 +208,42 @@ app.post('/', async (c) => {
     'PRODID:-//160 Main//Events//EN',
     'BEGIN:VEVENT',
     `UID:${id}@160main.events`,
-    `DTSTAMP:${startZ}`,
-    `DTSTART:${startZ}`,
-    `DTEND:${endZ}`,
-    `SUMMARY:${escapeICS(title)}`,
-    `DESCRIPTION:${escapeICS(details)}`,
-    `LOCATION:${escapeICS(location)}`,
+    `DTSTAMP:${start}`,
+    `DTSTART:${start}`,
+    `DTEND:${end}`,
+    `SUMMARY:${title}`,
+    `DESCRIPTION:${details}`,
+    `LOCATION:${location}`,
     'END:VEVENT',
-    'END:VCALENDAR'
+    'END:VCALENDAR',
   ].join('\r\n');
-  const icsB64 = btoa(ics);
-  const icsUrl = `data:text/calendar;base64,${icsB64}`;
 
-  return c.json({ ok:true, id, gcalUrl: gcalUrl.toString(), icsUrl });
+  // Base64 and URL-encode to avoid “string did not match expected pattern”
+  const icsB64 = btoa(ics);
+  const base = site || `https://${new URL(origin || 'https://example.com').host}`;
+  const icsUrl = `${base}/api/ics/${id}.ics?d=${encodeURIComponent(icsB64)}`;
+
+  return c.json(
+    {
+      ok: true,
+      id,
+      gcalUrl: gcalUrl.toString(),
+      icsUrl,
+    },
+    200,
+    {
+      'Access-Control-Allow-Origin': origin || '*',
+      Vary: 'Origin',
+    }
+  );
 });
 
-/** Helpers */
-function allowedOrigin(origin: string, list: string | undefined) {
-  if (!list) return false;
-  const allowed = list.split(',').map(s => s.trim()).filter(Boolean);
-  return allowed.includes(origin);
-}
-
-function escapeICS(value: string) {
-  return value.replace(/\\|,|;|\n/g, (m) => {
-    if (m === '\n') return '\\n';
-    return '\\' + m;
-  });
-}
+/**
+ * Cloudflare Pages Functions bridge for Hono.
+ * You can use onRequest to handle all methods; Pages will not emit 405s then.
+ */
+export const onRequest: PagesFunction<Env> = async (context) => {
+  return app.fetch(context.request, context.env, context);
+};
 
 export default app;
