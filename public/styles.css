@@ -290,3 +290,28 @@ fieldset.inline{ border:0; padding:0; margin:8px 0 12px }
   width:100%;
 }
 .centralizer .cta{ display:inline-block; }
+
+
+/* Plain-text success blocks (no banner) */
+#success-yes,
+#success-no{
+  background: transparent;
+  border: 0;
+  padding: 0;
+  box-shadow: none;
+}
+
+/* Tidy the text spacing */
+#success-yes h3, #success-no h3{ margin: 0 0 6px; font-size: 1.125rem; color: inherit; }
+#success-yes p,  #success-no p { margin: 0 0 8px;  color: inherit; }
+
+/* Keep the calendar links simple, inline text links */
+#success-yes .calendar-links,
+#success-no  .calendar-links{
+  display: flex; gap: 12px; flex-wrap: wrap; margin-top: 6px;
+}
+#success-yes .calendar-links a,
+#success-no  .calendar-links a{
+  text-decoration: underline; color: inherit; font-weight: 600;
+  padding: 0; border: 0; border-radius: 0; box-shadow: none;
+}
