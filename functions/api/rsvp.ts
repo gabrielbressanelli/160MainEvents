@@ -8,19 +8,40 @@ export interface Env {
   INTERNAL_NOTIFY_TO?: string;
   EVENT_SLUG?: string;
   EXPORT_TOKEN?: string;
-  SITE_ORIGIN?: string;
+  SITE_ORIGIN?: string; // comma-separated allow-list, e.g. "https://events.160maincarryout.com,https://160maincarryout.com"
 }
 
 const app = new Hono<{ Bindings: Env }>();
 
-app.post('/', async (c) => {
+/**
+ * Basic preflight support (useful if you ever switch to cross-origin POSTs)
+ */
+app.options('/', (c) => {
   const origin = c.req.header('origin') || '';
-  const site = c.env.SITE_ORIGIN || '';
-  if (site && origin && origin != site) {
-    return c.json({ ok:false, error:'Origin not allowed' }, 403);
+  const allow = allowedOrigin(origin, c.env.SITE_ORIGIN);
+  if (allow) {
+    c.header('Access-Control-Allow-Origin', origin);
+    c.header('Vary', 'Origin');
+  }
+  c.header('Access-Control-Allow-Methods', 'POST, OPTIONS');
+  c.header('Access-Control-Allow-Headers', 'Content-Type');
+  return c.body(null, 204);
+});
+
+app.post('/', async (c) => {
+  // Origin enforcement: only block when we *know* it’s a foreign origin
+  const origin = c.req.header('origin') || '';
+  const siteList = c.env.SITE_ORIGIN || '';
+  if (origin && !allowedOrigin(origin, siteList)) {
+    return c.json({ ok: false, error: 'Origin not allowed' }, 403);
+  }
+  if (origin) {
+    c.header('Access-Control-Allow-Origin', origin);
+    c.header('Vary', 'Origin');
   }
 
-  const body = await c.req.json().catch(() => ({}));
+  // Parse/validate body
+  const body = await c.req.json().catch(() => ({} as Record<string, string>));
   const {
     first_name = '', last_name = '', phone = '', email = '',
     will_attend = '', notes = '',
@@ -34,6 +55,7 @@ app.post('/', async (c) => {
   const emailOk = /[^@\s]+@[^@\s]+\.[^@\s]+/.test(email);
   if (!emailOk) return c.json({ ok:false, error:'Invalid email' }, 400);
 
+  // Verify Turnstile when configured
   if (c.env.TURNSTILE_SECRET) {
     const verifyRes = await fetch('https://challenges.cloudflare.com/turnstile/v0/siteverify', {
       method: 'POST',
@@ -55,12 +77,20 @@ app.post('/', async (c) => {
 
   const id = crypto.randomUUID();
   const now = new Date().toISOString();
-  await c.env.DB.prepare(
-    `INSERT INTO rsvps
-      (id, created_at, event_slug, first_name, last_name, phone, email, will_attend, notes, ip, user_agent, utm_source, utm_medium, utm_campaign)
-     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
-  ).bind(id, now, event_slug, first_name, last_name, phone, email, will_attend, notes, ip, ua, utm_source, utm_medium, utm_campaign).run();
 
+  try {
+    await c.env.DB.prepare(
+      `INSERT INTO rsvps
+        (id, created_at, event_slug, first_name, last_name, phone, email, will_attend, notes, ip, user_agent, utm_source, utm_medium, utm_campaign)
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
+    ).bind(
+      id, now, event_slug, first_name, last_name, phone, email, will_attend, notes, ip, ua, utm_source, utm_medium, utm_campaign
+    ).run();
+  } catch (e) {
+    return c.json({ ok:false, error:'Database error' }, 500);
+  }
+
+  // Email notifications (optional)
   const from = c.env.FROM_EMAIL || 'events@example.com';
   const internalTo = c.env.INTERNAL_NOTIFY_TO || 'events@example.com';
 
@@ -76,6 +106,16 @@ app.post('/', async (c) => {
     `If your plans change, reply to this email.`
   ].filter(Boolean).join('\n');
 
+  const textInternal = [
+    `New RSVP:`,
+    `${first_name} ${last_name}`,
+    `${email}`,
+    `${phone}`,
+    `Attend: ${will_attend}`,
+    `Notes: ${notes || '(none)'}`,
+    `UTM: ${utm_source}/${utm_medium}/${utm_campaign}`,
+  ].join('\n');
+
   const jsonMail = (to: string, subject: string, text: string) => ({
     personalizations: [{ to: [{ email: to }] }],
     from: { email: from, name: '160 Main Events' },
@@ -84,31 +124,39 @@ app.post('/', async (c) => {
   });
 
   if (c.env.SENDGRID_API_KEY) {
-    await fetch('https://api.sendgrid.com/v3/mail/send', {
-      method:'POST',
-      headers:{ 'Authorization': `Bearer ${c.env.SENDGRID_API_KEY}`, 'Content-Type':'application/json' },
-      body: JSON.stringify(jsonMail(email, subjectGuest, textGuest))
-    });
-    const textInternal = `New RSVP:\n${first_name} ${last_name}\n${email}\n${phone}\nAttend: ${will_attend}\nNotes: ${notes || '(none)'}\nUTM: ${utm_source}/${utm_medium}/${utm_campaign}\n`;
-    await fetch('https://api.sendgrid.com/v3/mail/send', {
-      method:'POST',
-      headers:{ 'Authorization': `Bearer ${c.env.SENDGRID_API_KEY}`, 'Content-Type':'application/json' },
-      body: JSON.stringify(jsonMail(internalTo, 'New RSVP — Piedmont Wine Dinner', textInternal))
-    });
+    const hdrs = {
+      'Authorization': `Bearer ${c.env.SENDGRID_API_KEY}`,
+      'Content-Type': 'application/json'
+    };
+    // fire-and-forget; don't fail request if email API hiccups
+    await Promise.allSettled([
+      fetch('https://api.sendgrid.com/v3/mail/send', {
+        method:'POST', headers: hdrs,
+        body: JSON.stringify(jsonMail(email, subjectGuest, textGuest))
+      }),
+      fetch('https://api.sendgrid.com/v3/mail/send', {
+        method:'POST', headers: hdrs,
+        body: JSON.stringify(jsonMail(internalTo, 'New RSVP — Piedmont Wine Dinner', textInternal))
+      })
+    ]);
   }
 
+  /**
+   * Calendar links
+   * Wed Nov 19, 2025 7:00–9:00 PM America/Detroit (EST) => 2025-11-20 00:00–02:00Z
+   */
   const title = 'Piedmont Wine Dinner — 160 Main';
   const details = 'Multi-course tasting menu paired with Piedmont wines.';
   const location = '160 Main, Northville, MI';
-  const start = '20251119T000000Z';
-  const end   = '20251119T020000Z';
+  const startZ = '20251120T000000Z';
+  const endZ   = '20251120T020000Z';
 
   const gcalUrl = new URL('https://calendar.google.com/calendar/render');
   gcalUrl.searchParams.set('action','TEMPLATE');
   gcalUrl.searchParams.set('text', title);
   gcalUrl.searchParams.set('details', details);
   gcalUrl.searchParams.set('location', location);
-  gcalUrl.searchParams.set('dates', `${start}/${end}`);
+  gcalUrl.searchParams.set('dates', `${startZ}/${endZ}`);
 
   const ics = [
     'BEGIN:VCALENDAR',
@@ -116,19 +164,33 @@ app.post('/', async (c) => {
     'PRODID:-//160 Main//Events//EN',
     'BEGIN:VEVENT',
     `UID:${id}@160main.events`,
-    `DTSTAMP:${start}`,
-    `DTSTART:${start}`,
-    `DTEND:${end}`,
-    `SUMMARY:${title}`,
-    `DESCRIPTION:${details}`,
-    `LOCATION:${location}`,
+    `DTSTAMP:${startZ}`,
+    `DTSTART:${startZ}`,
+    `DTEND:${endZ}`,
+    `SUMMARY:${escapeICS(title)}`,
+    `DESCRIPTION:${escapeICS(details)}`,
+    `LOCATION:${escapeICS(location)}`,
     'END:VEVENT',
     'END:VCALENDAR'
   ].join('\r\n');
   const icsB64 = btoa(ics);
-  const icsUrl = `${site}/api/ics/${id}.ics?d=${icsB64}`;
+  const icsUrl = `data:text/calendar;base64,${icsB64}`;
 
   return c.json({ ok:true, id, gcalUrl: gcalUrl.toString(), icsUrl });
 });
+
+/** Helpers */
+function allowedOrigin(origin: string, list: string | undefined) {
+  if (!list) return false;
+  const allowed = list.split(',').map(s => s.trim()).filter(Boolean);
+  return allowed.includes(origin);
+}
+
+function escapeICS(value: string) {
+  return value.replace(/\\|,|;|\n/g, (m) => {
+    if (m === '\n') return '\\n';
+    return '\\' + m;
+  });
+}
 
 export default app;
