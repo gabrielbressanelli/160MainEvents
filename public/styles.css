@@ -1,285 +1,229 @@
-:root{
-  --bg:#0b0d0f;
-  --ink:#111;
-  --paper:#faf8f5;
-  --accent:#b77a2e;
-  --muted:#667085;
-  --border:#e6e2da;
-  --shadow:0 10px 30px rgba(0,0,0,.18);
-
-  --brown: rgb(88 57 39);
-  --white: rgb(255 255 255);
-  --form-cream:#f6efe3;   /* shared cream for navbar + form card */
-  --nav-cream:#f6efe3;
-  --cta-top-shadow: 0 8px 18px rgba(0,0,0,.22);
-}
-
-/* Base */
-*{ box-sizing:border-box }
-html,body{ margin:0; padding:0 }
-html{ -webkit-text-size-adjust: 100%; }
-body{
-  font-family: system-ui,-apple-system,Segoe UI,Roboto,Inter,Arial,sans-serif;
-  color: var(--ink);
-  background: var(--white);        /* page shell is white */
-  line-height: 1.5;
-}
-
-/* Navbar */
-.topnav{
-  position: sticky; top: 0; z-index: 1000;
-  background: var(--nav-cream);
-  border-bottom: 1px solid var(--border);
-  padding-top: env(safe-area-inset-top);
-}
-.topnav-inner{
-  max-width: 980px; margin: 0 auto; padding: 10px 16px;
-  display: flex; align-items: center; justify-content: space-between;
-}
-.brand{ display:flex; align-items:center; gap:10px; text-decoration:none }
-.brand-logo{ height: 34px; width: auto; display:block }
-
-/* Instagram icon link */
-.nav-link{
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 40px; height: 40px;
-  padding: 6px;
-  border-radius: 8px;
-  text-decoration: none;
-  color: inherit;
-}
-.nav-link:focus-visible{
-  outline: 3px solid #c8a573; outline-offset: 2px;
-}
-.instagram-logo{
-  display: block;
-  width: 28px; height: 28px;
-  object-fit: contain;
-  image-rendering: -webkit-optimize-contrast;
-}
-@media (hover: hover){
-  .nav-link:hover .instagram-logo{
-    filter: brightness(1.05) contrast(1.05);
-    transform: translateY(-1px);
+/* ===========================
+   Design Tokens / Variables
+   =========================== */
+   :root{
+    --bg:#0b0d0f;
+    --ink:#111;
+    --paper:#faf8f5;
+    --accent:#b77a2e;
+    --muted:#667085;
+    --border:#e6e2da;
+    --shadow:0 10px 30px rgba(0,0,0,.18);
+  
+    /* Site palette you shared */
+    --brown: rgb(88 57 39);            /* page background (if used) */
+    --white: rgb(255 255 255);
+    --form-cream:#f6efe3;              /* shared cream for navbar + form card */
+    --nav-cream:#f6efe3;
+    --cta-top-shadow: 0 8px 18px rgba(0,0,0,.22);
   }
-}
-.nav-link:active .instagram-logo{
-  transform: translateY(0);
-  filter: brightness(.97);
-}
-
-/* =========================
-   HERO (picture-based)
-   ========================= */
-.hero{
-  position: relative;
-  min-height: 70vh;
-  display: block;
-  overflow: hidden;           /* avoid edge spill on zoomed crops */
-  background: #0b0d0f;        /* safe fallback while image decodes */
-}
-
-.hero-media,
-.hero-img{
-  width: 100%;
-  height: 100%;
-  display: block;
-}
-
-.hero-img{
-  object-fit: cover;          /* like background-size: cover */
-  object-position: 50% 30%;   /* bias up a bit; tweak if needed */
-}
-
-.hero-overlay{
-  position: absolute; inset: 0;
-  pointer-events: none;
-  background: linear-gradient(
-    180deg,
-    rgba(0,0,0,.10) 0%,
-    rgba(0,0,0,.25) 55%,
-    rgba(0,0,0,.50) 85%,
-    rgba(0,0,0,.60) 100%
-  );
-}
-
-@media (min-aspect-ratio: 16/9){
-  .hero-img{ object-position: 50% 26%; }
-}
-
-
-/* Layout container */
-main{ max-width:840px; margin:40px auto; padding:0 20px }
-
-/* ===== Full-bleed utilities for band sections ===== */
-.full-bleed{
-  width: 100vw;
-  position: relative;
-  left: 50%;
-  right: 50%;
-  margin-left: -50vw;
-  margin-right: -50vw;
-}
-.section-inner{
-  max-width: 840px;
-  margin: 0 auto;
-  padding: 0 20px;  
-}
-
-/* About the Evening — true edge-to-edge brown band */
-.details{
-  background: var(--brown);
-  color: #fff;
-  border: 0;
-  border-radius: 0;
-  box-shadow: none;
-  padding: 28px 0;                
-  padding-top: max(28px, env(safe-area-inset-top));
-}
-.details h2{ margin: 0 0 8px 0; color:#fff }
-.details p{ color: rgba(255,255,255,.92); margin: 0 }
-.bullets{ margin:12px 0 0 0; padding-left:20px }
-.bullets li::marker{ color: rgba(255,255,255,.85) }
-
-/* RSVP card — cream */
-.card{
-  background: var(--form-cream);
-  border: 1px solid var(--border);
-  border-radius: 16px;
-  padding: 24px;
-  box-shadow: var(--shadow);
-}
-.card h2{ margin-top:0 }
-
-/* Form controls */
-.grid{ display:grid; gap:16px }
-@media (min-width:720px){ .grid{ grid-template-columns:1fr 1fr } }
-
-label{ display:flex; flex-direction:column; gap:6px; margin-bottom:14px }
-input, textarea, select{
-  width:100%;
-  padding:12px 14px;
-  border:1.5px solid var(--border);
-  border-radius:10px;
-  font-size:16px;
-  background:#fff; color:var(--ink);
-  box-shadow: inset 0 1px 0 rgba(0,0,0,.02);
-  min-height: 44px; /* tap target on iOS */
-}
-input::placeholder, textarea::placeholder{ color:#9aa1a8; opacity:1 }
-input:focus, textarea:focus, select:focus{
-  outline:3px solid #e9d7a5; border-color:#c8a573;
-}
-fieldset.inline{ border:0; padding:0; margin:8px 0 12px }
-.radio{ display:inline-flex; align-items:center; gap:8px; margin-right:18px; padding:6px 10px; border-radius:8px }
-.radio input{ width:18px; height:18px }
-.error{ color:#b42318; min-height:18px }
-.alert{
-  margin-top:12px; padding:12px; border-radius:10px;
-  background:#fff7ed; border:1px solid #fed7aa; color:#7c2d12;
-}
-.success{
-  padding:20px; border-radius:12px;
-  background:#eff8ff; border:1px solid #bfdbfe; margin-top:8px;
-}
-.calendar-links{ display:flex; gap:12px; margin-top:12px }
-.calendar-links a{
-  padding:10px 14px; border-radius:999px; border:1px solid var(--border);
-  text-decoration:none; color:var(--ink);
-}
-
-/* Footer — white */
-.footer{
-  background:#fff;
-  border-top:1px solid var(--border);
-  max-width:840px; margin:40px auto;
-  padding:0 20px 40px 20px;
-  text-align:center; color:var(--muted);
-}
-.fine{ font-size:12px }
-
-/* Mobile polish */
-@media (max-width:480px){
-  .topnav-inner{ padding:10px 14px }
-  main{ margin:28px auto; padding:0 16px }
-  .card{ padding:18px; border-radius:14px }
-  .hero{ min-height: 58vh; }
-}
-
-/* Reduced motion */
-@media (prefers-reduced-motion: reduce){
-  /* No hero button anymore; nothing special to reduce here */
-}
-
-/* Remove gap between the hero and the details band */
-.hero + main { margin-top: 0; }
-
-/* Center the content within the brown band */
-.details .section-inner{
-  text-align: center;
-  max-width: 760px;   /* keeps lines readable */
-  padding: 0 20px;    /* mirrors main side padding */
-}
-
-/* Keep bullets tidy while the overall block is centered */
-.details .bullets{
-  list-style-position: inside;
-  padding-left: 0;
-  margin: 12px auto 0 auto;
-  display: inline-block;   /* centers the list block while bullets stay aligned */
-  text-align: left;        /* preserves easy scanning of bullet text */
-}
-
-/* RSVP band */
-.rsvp-band{
-  background: var(--brown);
-  color: rgb(0, 0, 0); /* only affects any text outside the card */
-  padding: 36px 0;
-  padding-top: max(36px, env(safe-area-inset-top));
-  padding-bottom: max(36px, env(safe-area-inset-bottom));
-}
-
-/* Size and center the card on the brown band */
-.rsvp-band .card{
-  margin: 0 auto;
-  max-width: 620px; /* adjust as needed */
-}
-
-/* Shared CTA style (used by #submit) */
-.cta{
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  margin: 12px auto 0;            /* centers inside the card */
-  min-width: 220px;
-  min-height: 44px;
-  padding: 14px 22px;
-  border: 0;
-  border-radius: 999px;
-  font-weight: 700;
-  text-decoration: none;
-  cursor: pointer;
-
-  background: linear-gradient(180deg, #c98b3e 0%, #a86a1f 100%);
-  color: #fff;
-  box-shadow: var(--cta-top-shadow);
-  transition: transform .12s ease, opacity .12s ease, filter .12s ease;
-}
-.cta:hover{ transform: scale(1.015) }
-.cta:active{ transform: scale(.985) }
-.cta:focus-visible{ outline: 3px solid #ffe3a3; outline-offset: 2px }
-
-/* Optional: full-width on small screens */
-@media (max-width: 1080px){
-  .card .cta{ width: 80%; }
-}
-
-/* Centering helper for the submit container */
-.centralizer{
-  text-align:center;
-  width:100%;
-}
-.centralizer .cta{ display:inline-block; }
+  
+  /* ===========================
+     Base / Reset
+     =========================== */
+  *{ box-sizing: border-box }
+  html, body{ margin:0; padding:0 }
+  body{
+    font-family: system-ui, -apple-system, Segoe UI, Roboto, Inter, Arial, sans-serif;
+    color: var(--ink);
+    background: var(--white);
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+  
+  img{ max-width:100%; height:auto; display:block }
+  a{ color: inherit; text-decoration: none }
+  button{ font: inherit }
+  
+  /* Utility containers */
+  .container{ width:min(1100px, 92vw); margin-inline:auto }
+  .section-pad{ padding: clamp(24px, 5vw, 64px) 0 }
+  
+  /* ===========================
+     Navbar (cream bar)
+     =========================== */
+  .top-nav{
+    position: sticky; top:0; z-index:10;
+    background: var(--nav-cream);
+    box-shadow: 0 1px 0 rgba(0,0,0,.06);
+  }
+  .top-nav .inner{
+    display:flex; align-items:center; justify-content:space-between;
+    height:64px; padding-inline:16px;
+  }
+  .top-nav .brand{ font-weight:700; letter-spacing:.2px }
+  .top-nav .links{ display:flex; gap:18px }
+  
+  /* ===========================
+     Hero with bottom-centered CTA
+     =========================== */
+  .hero{
+    position: relative;
+    isolation: isolate;                 /* predictable stacking context */
+    background: #000;                   /* fallback while image loads */
+  }
+  .hero-img{
+    width:100%;
+    height: clamp(320px, 60vh, 720px);
+    object-fit: cover;
+    object-position: center;
+    display:block;
+  }
+  
+  /* gentle bottom fade for contrast */
+  .hero::after{
+    content:"";
+    position:absolute; inset:0;
+    background: linear-gradient(to top, rgba(0,0,0,.35) 0%, rgba(0,0,0,0) 40%);
+    pointer-events:none;
+    z-index:1;
+  }
+  
+  /* CTA pinned to bottom-center, no movement on hover/active */
+  .hero-cta{
+    position:absolute;
+    left:50%;
+    transform: translateX(-50%);        /* center horizontally */
+    bottom: 20px;                        /* default; see safe-area support below */
+    z-index:2;
+  
+    min-width:220px; min-height:44px;
+    padding:14px 22px;
+    border:0; border-radius:999px;
+    font-weight:700; color:#fff;
+    background: linear-gradient(180deg, #c98b3e 0%, #a86a1f 100%);
+    box-shadow: var(--cta-top-shadow);
+    /* No motion: keep transitions non-transform */
+    transition: box-shadow .12s ease, opacity .12s ease;
+  }
+  @supports (padding: max(0px)){
+    .hero-cta{ bottom: max(20px, env(safe-area-inset-bottom)) }
+  }
+  .hero-cta:hover{ box-shadow: 0 10px 22px rgba(0,0,0,.24) }   /* no transform change */
+  .hero-cta:active{ opacity: .95 }                              /* tactile, no movement */
+  .hero-cta:focus-visible{
+    outline: 3px solid #ffe3a3;
+    outline-offset: 2px;
+  }
+  
+  /* ensure next section anchors scroll clear of the fixed CTA area */
+  .hero + *{ scroll-margin-top: 80px }
+  
+  /* ===========================
+     Buttons (shared style)
+     =========================== */
+  .btn, .cta{
+    display:inline-flex; align-items:center; justify-content:center;
+    gap:.5rem;
+    padding:12px 18px;
+    border-radius:999px;
+    border:0;
+    font-weight:700;
+    background: linear-gradient(180deg, #c98b3e 0%, #a86a1f 100%);
+    color:#fff;
+    box-shadow: var(--cta-top-shadow);
+    transition: box-shadow .12s ease, opacity .12s ease;
+  }
+  .btn:hover, .cta:hover{ box-shadow: 0 10px 22px rgba(0,0,0,.24) }
+  .btn:active, .cta:active{ opacity:.95 }
+  .btn:focus-visible, .cta:focus-visible{
+    outline:3px solid #ffe3a3; outline-offset:2px;
+  }
+  
+  /* ===========================
+     RSVP Card / Form
+     =========================== */
+  .form-wrap{
+    background: var(--form-cream);
+    padding: clamp(16px, 3vw, 24px);
+    border-radius: 18px;
+    box-shadow: var(--shadow);
+    border: 1px solid rgba(0,0,0,.04);
+  }
+  
+  .form-grid{
+    display:grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px 16px;
+  }
+  @media (max-width: 640px){
+    .form-grid{ grid-template-columns: 1fr }
+  }
+  
+  label{ font-size:.95rem; color:#222 }
+  .input, input[type="text"], input[type="email"], input[type="tel"], input[type="number"], select, textarea{
+    width:100%;
+    padding: 12px 14px;
+    border-radius: 10px;
+    border: 1px solid #ddd;
+    background:#fff;
+    color:#111;
+  }
+  input::placeholder, textarea::placeholder{ color:#9aa0a6 }
+  
+  .help{ font-size:.85rem; color: var(--muted) }
+  
+  .alert{
+    margin-top:10px;
+    padding:10px 12px;
+    border-radius:12px;
+    background:#fff7e6;
+    color:#7a4a00;
+    border:1px solid #ffd899;
+  }
+  
+  /* Proper centering helper (fix for earlier attempt) */
+  .centralizer{
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    gap:12px;
+  }
+  
+  /* ===========================
+     Cards / Images
+     =========================== */
+  .card{
+    background:#fff;
+    border-radius:16px;
+    border:1px solid #eee;
+    box-shadow: var(--shadow);
+    overflow:hidden;
+  }
+  .card-body{ padding:16px }
+  
+  .fixed-size-img{
+    width:100%;
+    aspect-ratio: 4 / 3;               /* keeps grid uniform */
+    object-fit: cover;
+    object-position: center;
+  }
+  
+  /* ===========================
+     Footer
+     =========================== */
+  .footer{
+    background: var(--paper);
+    color:#333;
+    border-top:1px solid #eee;
+    padding: 24px 0;
+    font-size:.95rem;
+  }
+  
+  /* ===========================
+     Accessibility & Motion
+     =========================== */
+  @media (prefers-reduced-motion: reduce){
+    *{ animation: none !important; transition: none !important }
+  }
+  
+  /* ===========================
+     Small Screen Tweaks
+     =========================== */
+  @media (max-width: 480px){
+    .top-nav .inner{ height:58px }
+    .hero-img{ height: clamp(300px, 55vh, 640px) }
+    .hero-cta{ min-width: 200px; padding: 12px 18px }
+  }
+  
