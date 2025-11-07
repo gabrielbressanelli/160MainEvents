@@ -10,7 +10,8 @@
     <meta property="og:type" content="website">
     <meta property="og:image" content="/images/hero-piedmont.png">
     <link rel="icon" href="/favicon.ico" sizes="any">
-    <link rel="preload" as="image" href="/images/hero-piedmont.png">
+    <link rel="preload" as="image" href="/images/hero-piedmont-mobile.jpg" media="(max-width: 799px)">
+    <link rel="preload" as="image" href="/images/hero-piedmont-desktop.jpg" media="(min-width: 800px)">
     <link rel="stylesheet" href="/styles.css" />
     <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
   </head>
@@ -35,6 +36,20 @@
 
     <!-- HERO -->
     <header class="hero" aria-label="Piedmont Wine Dinner">
+      <picture class="hero-media">
+        <!-- Mobile First -->
+         <source media="(max-width:799px)" srcset="/images/phone-hero.png">
+         <!-- Tablet/Desktop -->
+          <source media="max-width:800px" srcset="/images/desktop-hero.png">
+          <img
+          src="/images/desktop-hero.png"
+          alt="Piedmont Wine Event"
+          class="hero-img"
+          loading="eager"
+          decoding="async"
+          >
+      </picture>
+
       <div class="hero-overlay" aria-hidden="true"></div>
 
     </header>
@@ -44,16 +59,16 @@
       <section class="details full-bleed">
         <div class="section-inner">
           <button class="cta" type="button"
-            onclick="document.getElementById('brk').scrollIntoView({behavior:'smooth'})">
+            onclick="document.getElementById('lst').scrollIntoView({behavior:'smooth'})">
             Reserve Your Spot
           </button>
-          <br><br id="brk">
+          <br><br>
           <h2>About the Evening</h2>
           <p>Join us for a multi‑course tasting menu paired with exceptional wines from Italy’s Piedmont. Seats are limited.</p>
           <ul class="bullets">
             <li>Location: 160 Main, Northville, MI</li>
             <li>Time: Wednesday, Nov 19 @ 7:00 PM</li>
-            <li>Includes: curated wine pairings with each course</li>
+            <li id="lst">Includes: curated wine pairings with each course</li>
           </ul>
         </div>
       </section>

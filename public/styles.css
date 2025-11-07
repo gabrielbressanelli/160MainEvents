@@ -70,13 +70,29 @@ body{
   filter: brightness(.97);
 }
 
-/* Hero */
+/* =========================
+   HERO (picture-based)
+   ========================= */
 .hero{
   position: relative;
   min-height: 70vh;
   display: block;
-  background: url('/images/hero-piedmont.png') center/cover no-repeat;
+  overflow: hidden;           /* avoid edge spill on zoomed crops */
+  background: #0b0d0f;        /* safe fallback while image decodes */
 }
+
+.hero-media,
+.hero-img{
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.hero-img{
+  object-fit: cover;          /* like background-size: cover */
+  object-position: 50% 30%;   /* bias up a bit; tweak if needed */
+}
+
 .hero-overlay{
   position: absolute; inset: 0;
   pointer-events: none;
@@ -88,47 +104,11 @@ body{
     rgba(0,0,0,.60) 100%
   );
 }
-.logo{
-  position:absolute; top: max(20px, env(safe-area-inset-top)); left:50%; transform:translateX(-50%);
-  width:200px; max-width:60vw;
-  filter: drop-shadow(0 2px 6px rgba(0,0,0,.5));
-}
-.hero-cta{
-  position: absolute;
-  left: 50%;
-  bottom: 28px;
-  transform: translate(-50%, 0);     /* center horizontally; fixed baseline */
-  z-index: 2;
 
-  min-width: 220px;
-  min-height: 44px;
-  padding: 14px 22px;
-
-  background: linear-gradient(180deg, #c98b3e 0%, #a86a1f 100%);
-  color: #fff;
-  font-weight: 700;
-  border: none;
-  border-radius: 999px;
-  box-shadow: var(--cta-top-shadow);
-
-  transform-origin: center bottom;   /* scaling stays centered */
-  transition: transform .12s ease, opacity .12s ease;
+@media (min-aspect-ratio: 16/9){
+  .hero-img{ object-position: 50% 26%; }
 }
 
-/* If you want *no* visual movement at all, delete these two rules. */
-.hero-cta:hover  { transform: translate(-50%, 0) scale(1.01); }
-.hero-cta:active { transform: translate(-50%, 0) scale(.99); }
-
-.hero-cta:focus-visible{
-  outline: 3px solid #ffe3a3;
-  outline-offset: 2px;
-}
-
-@supports (padding: max(0px)) {
-  .hero-cta{
-    bottom: max(28px, env(safe-area-inset-bottom)); /* avoid iOS home bar */
-  }
-}
 
 /* Layout container */
 main{ max-width:840px; margin:40px auto; padding:0 20px }
@@ -145,7 +125,7 @@ main{ max-width:840px; margin:40px auto; padding:0 20px }
 .section-inner{
   max-width: 840px;
   margin: 0 auto;
-  padding: 0 20px;   /* match main side padding */
+  padding: 0 20px;  
 }
 
 /* About the Evening — true edge-to-edge brown band */
@@ -155,7 +135,7 @@ main{ max-width:840px; margin:40px auto; padding:0 20px }
   border: 0;
   border-radius: 0;
   box-shadow: none;
-  padding: 28px 0;                 /* vertical rhythm; horizontal via .section-inner */
+  padding: 28px 0;                
   padding-top: max(28px, env(safe-area-inset-top));
 }
 .details h2{ margin: 0 0 8px 0; color:#fff }
@@ -230,7 +210,7 @@ fieldset.inline{ border:0; padding:0; margin:8px 0 12px }
 
 /* Reduced motion */
 @media (prefers-reduced-motion: reduce){
-  .hero-cta{ transition:none }
+  /* No hero button anymore; nothing special to reduce here */
 }
 
 /* Remove gap between the hero and the details band */
@@ -252,11 +232,7 @@ fieldset.inline{ border:0; padding:0; margin:8px 0 12px }
   text-align: left;        /* preserves easy scanning of bullet text */
 }
 
-.hero-cta{ bottom: 4px; }
-@supports (padding: max(0px)){
-  .hero-cta{ bottom: max(4px, env(safe-area-inset-bottom)); }
-}
-
+/* RSVP band */
 .rsvp-band{
   background: var(--brown);
   color: rgb(0, 0, 0); /* only affects any text outside the card */
@@ -301,8 +277,7 @@ fieldset.inline{ border:0; padding:0; margin:8px 0 12px }
   .card .cta{ width: 80%; }
 }
 
-
-
+/* Centering helper for the submit container */
 .centralizer{
   text-align:center;
   width:100%;
