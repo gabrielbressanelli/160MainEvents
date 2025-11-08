@@ -111,7 +111,7 @@ body{
 }
 
 @media (min-width: 800px) {
-  .hero-img {
+  .hero {
     max-width: 1200px;  /* limit width on desktop */
     margin: 0 auto;     /* center it */
   }
