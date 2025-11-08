@@ -110,6 +110,14 @@ body{
   .hero-img{ object-position: 50% 26%; }
 }
 
+@media (min-width: 800px) {
+  .hero-img {
+    max-width: 1200px;  /* limit width on desktop */
+    margin: 0 auto;     /* center it */
+  }
+}
+
+
 /* If you still place a logo inside the hero, keep this helper */
 .logo{
   position:absolute; top: max(20px, env(safe-area-inset-top)); left:50%; transform:translateX(-50%);
