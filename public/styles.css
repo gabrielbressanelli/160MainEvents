@@ -112,7 +112,7 @@ body{
 
 @media (min-width: 800px) {
   .hero {
-    max-width: 1200px;  /* limit width on desktop */
+    max-height: 600px;  /* limit width on desktop */
     margin: 0 auto;     /* center it */
   }
 }
