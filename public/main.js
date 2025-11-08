@@ -81,6 +81,29 @@
     }
   }
 
+  if (icsLink) {
+    const now = new Date().toISOString().replace(/[-:]/g, '').split('.')[0] + 'Z';
+    const ics = `
+  BEGIN:VCALENDAR
+  VERSION:2.0
+  PRODID:-//160 Main//Piedmont Wine Dinner//EN
+  BEGIN:VEVENT
+  UID:piedmont-wine-dinner@160main.com
+  DTSTAMP:${now}
+  DTSTART:20251119T190000
+  DTEND:20251119T220000
+  SUMMARY:Piedmont Wine Dinner
+  DESCRIPTION:$250 per person
+  LOCATION:160 Main Restaurant
+  END:VEVENT
+  END:VCALENDAR
+  `.trim();
+  
+    const data = btoa(ics);
+    icsLink.href = `/api/ics?d=${encodeURIComponent(data)}`;
+  }
+  
+
   form.addEventListener('submit', onSubmit);
 })();
  
