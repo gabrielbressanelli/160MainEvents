@@ -103,7 +103,7 @@ body{
   .hero-img {
     /* Key: size by height, not width, and center it */
     height: 100%;
-    width: auto;              /* instead of 100% */
+    width: 100%;              /* instead of 100% */
     display: block;
     margin-inline: auto;      /* centers poster; creates side gutters */
     object-fit: contain;      /* show full poster, no cropping */
