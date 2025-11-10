@@ -90,29 +90,33 @@ body{
   background: linear-gradient(180deg, rgba(0,0,0,.10) 0%, rgba(0,0,0,.25) 55%, rgba(0,0,0,.50) 85%, rgba(0,0,0,.60) 100%);
 }
 
-/* ---------- Desktop: show full graphic, keep it shallow ---------- */
-@media (min-width: 1024px) {
-  .hero {
-    /* ~1/3 screen on typical laptops, but capped for very large or small screens */
-    height: clamp(380px, 38vh, 560px);
-    min-height: auto;
-    max-height: 600px;
-    background: #f6efe3; /* letterbox color (matches your palette) */
+/* Desktop: intrinsic sizing, no cropping */
+@media (min-width:1024px){
+  .hero{
+    display:grid;                /* easy centering */
+    place-items:center;
+    padding-block: clamp(16px, 3vh, 40px);   /* gentle top/btm breathing room */
+    background:#f6efe3;          /* letterbox color */
+    min-height: unset;           /* override mobile 70vh */
+    height: auto;
+    overflow: visible;           /* no accidental clipping */
   }
 
-  .hero-img {
-    /* Key: size by height, not width, and center it */
-    height: 100%;
-    width: 100%;              /* instead of 100% */
-    display: block;
-    margin-inline: auto;      /* centers poster; creates side gutters */
-    object-fit: contain;      /* show full poster, no cropping */
-    object-position: center;
+  .hero-media{ width:auto; height:auto; }
+
+  .hero-img{
+    /* KEY: limit by both dimensions, but keep intrinsic ratio */
+    width:auto;
+    height:auto;
+    max-width: min(1200px, 92vw);   /* don’t exceed page width */
+    max-height: clamp(340px, 42vh, 560px);  /* ~1/3 screen feel, but flexible */
+    object-fit: unset;               /* no contain/cover on desktop */
+    object-position: center;         /* harmless, but explicit */
+    display:block;
   }
 
-  .hero-overlay { display: none; }
+  .hero-overlay{ display:none; }     /* text is baked into the image */
 }
-
 /* If you still place a logo inside the hero, keep this helper */
 .logo{
   position:absolute; top: max(20px, env(safe-area-inset-top)); left:50%; transform:translateX(-50%);
