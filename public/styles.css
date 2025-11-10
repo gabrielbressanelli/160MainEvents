@@ -93,21 +93,24 @@ body{
 /* ---------- Desktop: show full graphic, keep it shallow ---------- */
 @media (min-width: 1024px) {
   .hero {
-    /* cap total height so it’s ~1/3 screen; never too tall, never too tiny */
-    height: clamp(260px, 32vh, 440px);
-    min-height: auto;    /* override the 70vh mobile rule */
-    max-height: 520px;   /* safety cap for huge screens */
-    background: #f6efe3; /* pleasant “letterbox” color behind the image edges */
+    /* ~1/3 screen on typical laptops, but capped for very large or small screens */
+    height: clamp(380px, 38vh, 560px);
+    min-height: auto;
+    max-height: 600px;
+    background: #f6efe3; /* letterbox color (matches your palette) */
   }
 
   .hero-img {
+    /* Key: size by height, not width, and center it */
     height: 100%;
-    width: 100%;
-    object-fit: contain;      /* <-- key change: no cropping on desktop */
-    object-position: center;  /* center the artwork */
+    width: auto;              /* instead of 100% */
+    display: block;
+    margin-inline: auto;      /* centers poster; creates side gutters */
+    object-fit: contain;      /* show full poster, no cropping */
+    object-position: center;
   }
 
-  .hero-overlay { display: none; } /* baked-in text doesn’t need extra darkening */
+  .hero-overlay { display: none; }
 }
 
 /* If you still place a logo inside the hero, keep this helper */
