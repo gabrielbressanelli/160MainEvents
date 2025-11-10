@@ -73,48 +73,43 @@ body{
 /* =========================
    HERO (picture-based)
    ========================= */
+/* Set a predictable, slim height band */
 .hero{
+  --hero-h: clamp(260px, 30vh, 520px);   /* ≈ 1/3 screen cap */
   position: relative;
-  min-height: 70vh;
-  display: block;
-  overflow: hidden;           /* avoid edge spill on zoomed crops */
-  background: #0b0d0f;        /* safe fallback while image decodes */
+  height: var(--hero-h);                 /* use fixed height, not min-height */
+  overflow: hidden;
+  background: #0b0d0f;
 }
 
-.hero-media,
-.hero-img{
+.hero-media, .hero-img{
   width: 100%;
   height: 100%;
   display: block;
 }
 
 .hero-img{
-  object-fit: cover;          /* like background-size: cover */
-  object-position: 50% 30%;   /* bias up a bit; tweak if needed */
+  object-fit: cover;                     /* keeps edge-to-edge */
+  object-position: 50% 32%;              /* nudge up to keep key text centered */
 }
 
 .hero-overlay{
   position: absolute; inset: 0;
   pointer-events: none;
-  background: linear-gradient(
-    180deg,
-    rgba(0,0,0,.10) 0%,
-    rgba(0,0,0,.25) 55%,
-    rgba(0,0,0,.50) 85%,
-    rgba(0,0,0,.60) 100%
-  );
+  background: linear-gradient(180deg, rgba(0,0,0,.10) 0%,
+                                      rgba(0,0,0,.25) 55%,
+                                      rgba(0,0,0,.50) 85%,
+                                      rgba(0,0,0,.60) 100%);
 }
 
-/* Optional: very wide/short viewports (e.g., large desktop 16:9) */
+/* Wider screens: keep it slim */
+@media (min-width: 1024px){
+  .hero{ --hero-h: clamp(280px, 28vh, 480px); }
+}
+
+/* Very wide/short viewports */
 @media (min-aspect-ratio: 16/9){
-  .hero-img{ object-position: 50% 26%; }
-}
-
-@media (min-width: 800px) {
-  .hero {
-    max-height: 1200px;  /* limit width on desktop */
-    margin: 0 auto;     /* center it */
-  }
+  .hero-img{ object-position: 50% 28%; }
 }
 
 
