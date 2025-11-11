@@ -39,9 +39,9 @@
         <header class="hero" aria-label="Piedmont Wine Dinner">
           <picture class="hero-media">
             <!-- Mobile First -->
-            <source media="(max-width:799px)" srcset="/images/phoneNB-hero.jpg">
+            <source media="(max-width:799px)" srcset="images/phoneNB-hero.jpg">
             <!-- Tablet/Desktop -->
-            <source media="(min-width:800px)" srcset="/images/hero.png">
+            <source media="(min-width:799px)" srcset="images/hero.png">
               <img
               src="/images/phoneNB-hero.jpg"
               alt="Piedmont Wine Event"
@@ -54,7 +54,23 @@
           <div class ="hero-content">
             <div class="hero-title">PIEDEMONT</div>
             <div class="hero-title-2">WINE DINNER</div>
-            <div class="hero-sub">WEDNESDAY <br> NOV 19th at 7PM <br>$250 per person</div>
+            <div class="hero-sub" aria-label="Event details">
+              <span class="hs-day">Wednesday</span>
+            
+              <span class="hs-when">
+                <span class="hs-month">Nov</span>
+                <span class="hs-date">19<sup>th</sup></span>
+                <span class="hs-at">at 7pm</span>
+              </span>
+            
+              <span class="hs-price">
+                <span class="hs-amount"><span class="hs-dollar">$</span>250</span>
+                <span class="hs-per">
+                  <span>PER</span>
+                  <span>PERSON</span>
+                </span>
+              </span>
+            </div>
           </div>
 
 
