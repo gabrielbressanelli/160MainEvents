@@ -12,7 +12,7 @@
     <link rel="icon" href="/favicon.ico" sizes="any">
     <link rel="preload" as="image" href="/images/phone-hero.png" media="(max-width: 799px)">
     <link rel="preload" as="image" href="/images/desktopNB-hero.jpg" media="(min-width: 800px)">
-    <link rel="stylesheet" href="/styles.css" />
+    <link rel="stylesheet" href="/styles.css">
     <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
   </head>
   <body>
@@ -35,27 +35,35 @@
     </nav>
 
     <!-- HERO -->
-    <header class="hero" aria-label="Piedmont Wine Dinner">
-      <picture class="hero-media">
-        <!-- Mobile First -->
-         <source media="(max-width:799px)" srcset="/images/phone-hero.png">
-         <!-- Tablet/Desktop -->
-          <source media="(min-width:800px)" srcset="/images/desktopNB-hero.jpg">
-          <img
-          src="/images/phone-hero.png"
-          alt="Piedmont Wine Event"
-          class="hero-img"
-          loading="eager"
-          decoding="async"
-          >
-      </picture>
+     <!-- <div class="hero-container"> -->
+        <header class="hero" aria-label="Piedmont Wine Dinner">
+          <picture class="hero-media">
+            <!-- Mobile First -->
+            <source media="(max-width:799px)" srcset="/images/phoneNB-hero.jpg">
+            <!-- Tablet/Desktop -->
+            <source media="(min-width:800px)" srcset="/images/hero.png">
+              <img
+              src="/images/phoneNB-hero.jpg"
+              alt="Piedmont Wine Event"
+              class="hero-img"
+              loading="eager"
+              decoding="async"
+              >
+          </picture>
 
-      <div class="hero-overlay" aria-hidden="true"></div>
+          <div class ="hero-content">
+            <div class="hero-title">PIEDEMONT</div>
+            <div class="hero-title-2">WINE DINNER</div>
+            <div class="hero-sub">WEDNESDAY <br> NOV 19th at 7PM <br>$250 per person</div>
+          </div>
 
-    </header>
+
+          <!-- <div class="hero-overlay" aria-hidden="true"></div> -->
+
+        </header>
+      <!-- </div> -->
 
     <main>
-      
       <section class="details full-bleed">
         <div class="section-inner">
           <button class="cta" type="button"
@@ -70,6 +78,12 @@
             <li>Time: Wednesday, Nov 19 @ 7:00 PM</li>
             <li id="lst">Includes: curated wine pairings with each course</li>
           </ul>
+        </div>
+      </section>
+
+      <section class="menu-section">
+        <div class="menu-grid">
+          <img class="menu" src="/images/menu-wine-event.png" alt="Menu Wine Event">
         </div>
       </section>
 

@@ -70,53 +70,117 @@ body{
   filter: brightness(.97);
 }
 
-/* Mobile defaults (unchanged) */
-.hero {
-  position: relative;
-  min-height: 70vh;
-  display: block;
-  overflow: hidden;
-  background: #0b0d0f;
-}
-.hero-media,
-.hero-img { width: 100%; height: 100%; display: block; }
-.hero-img {
-  object-fit: cover;
-  object-position: 50% 30%;
-}
-.hero-overlay {
-  position: absolute; inset: 0;
-  pointer-events: none;
-  background: linear-gradient(180deg, rgba(0,0,0,.10) 0%, rgba(0,0,0,.25) 55%, rgba(0,0,0,.50) 85%, rgba(0,0,0,.60) 100%);
-}
-
-/* Desktop: intrinsic sizing, no cropping */
-@media (min-width:1024px){
-  .hero{
-    display:grid;                /* easy centering */
-    place-items:center;
-    padding-block: clamp(16px, 3vh, 40px);   /* gentle top/btm breathing room */
-    background:#f6efe3;          /* letterbox color */
-    min-height: unset;           /* override mobile 70vh */
-    height: auto;
-    overflow: visible;           /* no accidental clipping */
+/* =========================
+   HERO (picture-based)
+   ========================= */
+@media only screen and (max-width:799px) {
+  .hero .hero-title,
+  .hero .hero-title-2,
+  .hero .hero-sub {
+    display: none;
   }
+  
+}
 
-  .hero-media{ width:auto; height:auto; }
-
+@media (min-width:799px ) {
   .hero-img{
-    /* KEY: limit by both dimensions, but keep intrinsic ratio */
-    width:auto;
-    height:auto;
-    max-width: min(1200px, 92vw);   /* don’t exceed page width */
-    max-height: clamp(340px, 42vh, 560px);  /* ~1/3 screen feel, but flexible */
-    object-fit: unset;               /* no contain/cover on desktop */
-    object-position: center;         /* harmless, but explicit */
-    display:block;
-  }
-
-  .hero-overlay{ display:none; }     /* text is baked into the image */
+    width: 100%;
+    height: 600px;
+    object-fit: cover;
+    vertical-align: bottom;
+    }
+    
+    /* PIEDMONT / WINE DINNER (serif + bold, big, tight line-height) */
+    .hero .hero-title{
+      position: absolute;
+      left: 50%;
+      top: 15%;
+      transform: translate(-50%, -15%);
+      background: none;
+      color: #111;
+      text-decoration: none;
+      padding: 0;
+      font-family: "Georgia","Times New Roman",serif;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .04em;
+      font-size: clamp(32px, 6vw, 110px);
+    }
+    
+    /* WINE DINNER (tall, white, single line) */
+    .hero .hero-title-2{
+      position: absolute;
+      left: 50%;
+      top: 30%;                  /* added line—does not change your other divs */
+      transform: translate(-50%, -30%);
+      background: none;
+      color: #fff;
+      text-decoration: none;
+      padding: 0;
+      font-family: Impact, Haettenschweiler, "Arial Narrow Bold", sans-serif;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: .06em;
+      white-space: nowrap;       /* prevents the split */
+      text-shadow: 0 4px 20px rgba(0,0,0,.45);
+      font-size: clamp(40px, 10vw, 160px);
+      line-height: 0.9;
+    }
+    
+    /* Schedule pill */
+    .hero .hero-sub{
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      background: rgba(0,0,0,.65);
+      color: #fff;
+      text-decoration: none;
+      padding: 14px 20px;
+      border-radius: 18px;
+      font-weight: 700;
+      letter-spacing: .02em;
+      font-size: clamp(16px, 2.8vw, 36px);
+      backdrop-filter: blur(1px);
+      text-align: center;
+    }
+    
+  
 }
+.hero-img{
+width: 100%;
+height: 600px;
+object-fit: cover;
+vertical-align: bottom;
+}
+
+
+/* Menu Style */
+@media only screen and (min-width: 799px) {
+  .menu-section{
+    display: none;
+  }
+}
+
+.menu-section {
+  padding: 40px 0;
+  background: var(--white);
+}
+
+.menu-section .menu-grid {
+  display: flex;
+  justify-content: center;
+}
+
+.menu {
+  width: 100%;
+  max-width: 700px;   /* controls how large the menu card appears */
+  height: auto;
+  display: block;
+  border-radius: 6px; /* optional — matches the polished look */
+}
+
+
 /* If you still place a logo inside the hero, keep this helper */
 .logo{
   position:absolute; top: max(20px, env(safe-area-inset-top)); left:50%; transform:translateX(-50%);
@@ -148,7 +212,7 @@ main{ max-width:840px; margin:40px auto; padding:0 20px }
   color: #fff;
   border: 0;
   border-radius: 0;
-  box-shadow: none;
+  box-shadow: none; 
   padding: 28px 0;                 /* vertical rhythm; horizontal via .section-inner */
   padding-top: max(28px, env(safe-area-inset-top));
 }
@@ -208,7 +272,7 @@ fieldset.inline{ border:0; padding:0; margin:8px 0 12px }
 .footer{
   background:#fff;
   border-top:1px solid var(--border);
-  max-width:840px; margin:40px auto;
+  width:  100%; margin:40px auto;
   padding:0 20px 40px 20px;
   text-align:center; color:var(--muted);
 }
