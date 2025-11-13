@@ -74,6 +74,10 @@ body{
    HERO (picture-based)
    ========================= */
 
+.hero{
+  background: var(--brown);
+}
+
 .hero-img{
     width: 100%;
     height: 500px;
@@ -89,10 +93,10 @@ body{
   
 }
 
-@media (min-width:799px ) {
+@media (min-width:800px ) {
   .hero-img{
     width: 100%;
-    height: 500px;
+    height: 27em;
     object-fit: cover;
     vertical-align: bottom;
     }
@@ -118,8 +122,8 @@ body{
     .hero .hero-title-2{
       position: absolute;
       left: 50%;
-      top: 25%;                  /* added line—does not change your other divs */
-      transform: translate(-50%, -25%) scale(0.8);
+      top: 23%;                  /* added line—does not change your other divs */
+      transform: translate(-50%, -23%) scale(0.8);
       background: none;
       color: #fff;
       text-decoration: none;
@@ -148,8 +152,8 @@ body{
     .hero .hero-sub{
       position: absolute;
       left: 50%;
-      top: 49%;
-      transform: translate(-50%, -49%) scale(0.53);
+      top: 42%;
+      transform: translate(-50%, -42%) scale(0.48);
       transform-origin: center;
       background: rgba(0,0,0,.65);
       color: #fff;
@@ -213,7 +217,7 @@ body{
 
 
 /* Menu Style */
-@media only screen and (min-width: 799px) {
+@media only screen and (min-width: 800px) {
   .menu-section{
     display: none;
   }
@@ -286,11 +290,11 @@ main{ max-width:840px; margin:40px auto; padding:0 20px }
   padding: 24px;
   box-shadow: var(--shadow);
 }
-.card h2{ margin-top:0 }
+.card h2{ margin-top:10px;}
 
 /* Form controls */
 .grid{ display:grid; gap:16px }
-@media (min-width:720px){ .grid{ grid-template-columns:1fr 1fr } }
+@media (min-width:800px){ .grid{ grid-template-columns:1fr 1fr } }
 
 label{ display:flex; flex-direction:column; gap:6px; margin-bottom:14px }
 input, textarea, select{
@@ -353,9 +357,9 @@ fieldset.inline{ border:0; padding:0; margin:8px 0 12px }
 
 /* Center the content within the brown band */
 .details .section-inner{
-  text-align: center;
+  text-align:center;
   max-width: 760px;   /* keeps lines readable */
-  padding: 0 20px;    /* mirrors main side padding */
+  padding: 0 0px;    /* mirrors main side padding */
 }
 
 /* Keep bullets tidy while the overall block is centered */
@@ -364,14 +368,14 @@ fieldset.inline{ border:0; padding:0; margin:8px 0 12px }
   padding-left: 0;
   margin: 12px auto 0 auto;
   display: inline-block;   /* centers the list block while bullets stay aligned */
-  text-align: left;        /* preserves easy scanning of bullet text */
+  text-align: center;        /* preserves easy scanning of bullet text */
 }
 
 /* RSVP band */
 .rsvp-band{
   background: var(--brown);
-  color: rgb(0, 0, 0); /* only affects any text outside the card */
-  padding: 36px 0;
+  color: rgb(0, 0, 0); 
+  padding: 36px;
   padding-top: max(36px, env(safe-area-inset-top));
   padding-bottom: max(36px, env(safe-area-inset-bottom));
 }
@@ -442,4 +446,88 @@ fieldset.inline{ border:0; padding:0; margin:8px 0 12px }
 #success-no  .calendar-links a{
   text-decoration: underline; color: inherit; font-weight: 600;
   padding: 0; border: 0; border-radius: 0; box-shadow: none;
+}
+
+
+.two-up-band{
+  background: var(--nav-cream);
+}
+
+/* Mobile stacks */
+@media (max-width: 799px){
+  .two-up-band .row-inner{ 
+    display:block;
+    padding: 24px;
+   }
+  .desktop-menu-section{ display:none; }
+  .two-up-band #rsvp .card{ height:auto; max-width: 620px; margin: 0 auto; }
+}
+
+/* Desktop: true 50/50, no inner max-width */
+@media (min-width: 800px){
+  .menu-section{ display: none; }              /* hide the separate mobile image block */
+
+  .two-up-band .row-inner{
+    display: grid;
+    grid-template-columns: 0.8fr 1.2fr;            /* 50/50 */
+    align-items:stretch;
+    gap: 10px;                                    /* no seam between panes */
+    width: 100%;
+    max-width: none;                            /* allow full-bleed width */
+    padding: 0;                                 /* no side gutters inside */
+    margin: 0;
+  }
+
+  .desktop-menu-section{
+    display:block;
+    position: relative;
+    overflow: hidden;
+
+  }
+
+  .menu-fill{
+    display:block;
+    width:100%;
+    height:100%;
+    object-fit:filL;
+    object-position:center;
+
+  }
+
+  #rsvp-section{ display:block; }
+  #rsvp{
+    display:flex;
+    flex-direction:column;
+    height:100%;
+    padding: 36px;
+    padding-right: 96px;
+  }
+  .two-up-band #rsvp.card,
+  .two-up-band #rsvp .card{
+    margin:0;
+    width:100%;
+    height:100%;                               /* card matches image column height */
+    border-radius:0;                            /* flush edge to edge */
+  }
+}
+
+@media (max-width:799px) {
+  .hide-on-phone{
+    display: none;
+  }
+  
+}
+
+@media (min-width:800px) {
+  .hide-on-desktop {
+    display: none;
+  }
+  
+}
+
+.brown-band{
+  background: var(--brown);
+  height: 20px;
+  
+
 }

@@ -16,165 +16,174 @@
     <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
   </head>
   <body>
-<!-- NAVBAR -->
+    <!-- NAVBAR -->
     <nav class="topnav" aria-label="Primary">
       <div class="topnav-inner">
         <a href="/" class="brand">
           <img src="/images/160Main-New.png" alt="160 Main" class="brand-logo" />
         </a>
-      <a class="nav-link" href="https://www.instagram.com/160_main"
-        target="_blank" rel="noopener noreferrer"
-        aria-label="160 Main on Instagram">
-       <img src="/images/instagram.png"
-            alt="Instagram"
-            class="instagram-logo"
-            width="28" height="28"
-            loading="lazy" decoding="async" />
-      </a>
+
+        </a>
+        <a class="nav-link" href="https://www.instagram.com/160_main"
+           target="_blank" rel="noopener noreferrer"
+           aria-label="160 Main on Instagram">
+          <img src="/images/instagram.png"
+               alt="Instagram"
+               class="instagram-logo"
+               width="28" height="28"
+               loading="lazy" decoding="async" />
+        </a>
       </div>
     </nav>
 
     <!-- HERO -->
-     <!-- <div class="hero-container"> -->
-        <header class="hero" aria-label="Piedmont Wine Dinner">
-          <picture class="hero-media">
-            <!-- Mobile First -->
-            <source media="(max-width:799px)" srcset="images/phoneNB-hero.jpg">
-            <!-- Tablet/Desktop -->
-            <source media="(min-width:799px)" srcset="images/hero.png">
-              <img
-              src="/images/phoneNB-hero.jpg"
-              alt="Piedmont Wine Event"
-              class="hero-img"
-              loading="eager"
-              decoding="async"
-              >
-          </picture>
+    <header class="hero" aria-label="Piedmont Wine Dinner">
+      <picture class="hero-media">
+        <!-- Mobile First -->
+        <source media="(max-width:799px)" srcset="/images/phoneNB-hero.jpg">
+        <!-- Tablet/Desktop -->
+        <source media="(min-width:800px)" srcset="/images/hero.png">
+        <img
+          src="/images/phoneNB-hero.jpg"
+          alt="Piedmont Wine Event"
+          class="hero-img"
+          loading="eager"
+          decoding="async"
+        >
+      </picture>
 
-          <div class ="hero-content">
-            <div class="hero-title">PIEDEMONT</div>
-            <div class="hero-title-2">WINE DINNER</div>
-            <div class="hero-sub" aria-label="Event details">
-              <span class="hs-day">Wednesday</span>
-            
-              <span class="hs-when">
-                <span class="hs-month">Nov</span>
-                <span class="hs-date">19<sup>th</sup></span>
-                <span class="hs-at">at 7pm</span>
-              </span>
-            
-              <span class="hs-price">
-                <span class="hs-amount"><span class="hs-dollar">$</span>250</span>
-                <span class="hs-per">
-                  <span>PER</span>
-                  <span>PERSON</span>
-                </span>
-              </span>
-            </div>
-          </div>
-
-
-          <!-- <div class="hero-overlay" aria-hidden="true"></div> -->
-
-        </header>
-      <!-- </div> -->
+      <div class="hero-content">
+        <div class="hero-title">PIEDMONT</div>
+        <div class="hero-title-2">WINE DINNER</div>
+        <div class="hero-sub" aria-label="Event details">
+          <span class="hs-day">Wednesday</span>
+          <span class="hs-when">
+            <span class="hs-month">Nov</span>
+            <span class="hs-date">19<sup>th</sup></span>
+            <span class="hs-at">at 7pm</span>
+          </span>
+          <span class="hs-price">
+            <span class="hs-amount"><span class="hs-dollar">$</span>250</span>
+            <span class="hs-per">
+              <span>PER</span>
+              <span>PERSON</span>
+            </span>
+          </span>
+        </div>
+      </div>
+    </header>
 
     <main>
+      <!-- ABOUT BAND -->
       <section class="details full-bleed">
         <div class="section-inner">
-          <button class="cta" type="button"
-            onclick="document.getElementById('rsvp-section').scrollIntoView({behavior:'smooth'})">
-            Reserve Your Spot
-          </button>
-          <br><br>
+            <button class="cta hide-on-desktop" type="button"
+              onclick="document.getElementById('rsvp-section').scrollIntoView({behavior:'smooth'})">
+              Reserve Your Spot
+            </button>
+          <br class="hide-on-desktop"><br class="hide hide-on-desktop">
           <h2>About the Evening</h2>
-          <p>Join us for a multi‑course tasting menu paired with exceptional wines from Italy’s Piedmont. Seats are limited.</p>
+          <p>Join us for a multi-course tasting menu paired with exceptional wines from Italy’s Piedmont. Seats are limited.</p>
           <ul class="bullets">
             <li>Location: 160 Main, Northville, MI</li>
             <li>Time: Wednesday, Nov 19 @ 7:00 PM</li>
-            <li id="lst">Includes: curated wine pairings with each course</li>
           </ul>
         </div>
       </section>
 
+      <!-- MOBILE/TABLET MENU IMAGE (hidden on desktop via CSS) -->
       <section class="menu-section">
         <div class="menu-grid">
           <img class="menu" src="/images/menu-wine-event.png" alt="Menu Wine Event">
         </div>
       </section>
 
-      <section id="rsvp-section" class="rsvp-band full-bleed" aria-label="RSVP">
-          <section id="rsvp" class="card">
-            <h2>RSVP</h2>
-            <form id="rsvp-form" novalidate>
-              <div class="grid">
-                <label>
-                  <span>First Name*</span>
-                  <input type="text" name="first_name" required autocomplete="given-name" />
-                  <small class="error" data-for="first_name"></small>
-                </label>
-                <label>
-                  <span>Last Name*</span>
-                  <input type="text" name="last_name" required autocomplete="family-name" />
-                  <small class="error" data-for="last_name"></small>
-                </label>
-              </div>
-              <div class="grid">
-                <label>
-                  <span>Phone*</span>
-                  <input type="tel" name="phone" required inputmode="tel" placeholder="e.g., (248) 555‑1234" />
-                  <small class="error" data-for="phone"></small>
-                </label>
-                <label>
-                  <span>Email*</span>
-                  <input type="email" name="email" required autocomplete="email" />
-                  <small class="error" data-for="email"></small>
-                </label>
-              </div>
-              <fieldset class="inline">
-                <legend>Will you attend?*</legend>
-                <label class="radio"><input type="radio" name="will_attend" value="yes" required /> <span>Yes</span></label>
-                <label class="radio"><input type="radio" name="will_attend" value="no" /> <span>No</span></label>
-                <small class="error" data-for="will_attend"></small>
-              </fieldset>
-              <label>
-                <span>Attendance Notes</span>
-                <textarea name="notes" rows="4" placeholder="Dietary needs, seating requests, etc."></textarea>
-              </label>
+      <!-- DESKTOP TWO-COLUMN (image + RSVP), full-bleed shell with inner width -->
+      <section class="two-up-band full-bleed" aria-label="Menu and RSVP">
+        <div class="row-inner">
+          <aside class="desktop-menu-section">
+            <img class="menu-fill" src="/images/menu-wine-event.png" alt="Menu Wine Event" loading="lazy" decoding="async">
+          </aside>
 
-              <input type="hidden" name="utm_source" />
-              <input type="hidden" name="utm_medium" />
-              <input type="hidden" name="utm_campaign" />
+          <section id="rsvp-section" aria-label="RSVP">
+            <div id="rsvp">
+              <h2>RSVP</h2>
+              <form id="rsvp-form" novalidate>
+                <div class="grid">
+                  <label>
+                    <span>First Name*</span>
+                    <input type="text" name="first_name" required autocomplete="given-name" />
+                    <small class="error" data-for="first_name"></small>
+                  </label>
+                  <label>
+                    <span>Last Name*</span>
+                    <input type="text" name="last_name" required autocomplete="family-name" />
+                    <small class="error" data-for="last_name"></small>
+                  </label>
+                </div>
 
-              <div class="cf-turnstile" data-sitekey="0x4AAAAAAB_eQ0EYUm3xAYSK"></div>
-              <div class="centralizer">
-                <button id="submit" type="submit" class="cta">Submit RSVP</button>
-                <div id="form-alert" class="alert" hidden></div>
+                <div class="grid">
+                  <label>
+                    <span>Phone*</span>
+                    <input type="tel" name="phone" required inputmode="tel" placeholder="e.g., (248) 555-1234" />
+                    <small class="error" data-for="phone"></small>
+                  </label>
+                  <label>
+                    <span>Email*</span>
+                    <input type="email" name="email" required autocomplete="email" />
+                    <small class="error" data-for="email"></small>
+                  </label>
+                </div>
+
+                <fieldset class="inline">
+                  <legend>Will you attend?*</legend>
+                  <label class="radio"><input type="radio" name="will_attend" value="yes" required /> <span>Yes</span></label>
+                  <label class="radio"><input type="radio" name="will_attend" value="no" /> <span>No</span></label>
+                  <small class="error" data-for="will_attend"></small>
+                </fieldset>
+
+                <label>
+                  <span>Attendance Notes</span>
+                  <textarea name="notes" rows="4" placeholder="Dietary needs, seating requests, etc."></textarea>
+                </label>
+
+                <div class="hide-on-phone"> <br><br> <br><br> </div>
+
+                <input type="hidden" name="utm_source" />
+                <input type="hidden" name="utm_medium" />
+                <input type="hidden" name="utm_campaign" />
+
+                <div class="cf-turnstile" data-sitekey="0x4AAAAAAB_eQ0EYUm3xAYSK"></div>
+
+                <div class="centralizer">
+                  <button id="submit" type="submit" class="cta">Submit RSVP</button>
+                  <div id="form-alert" class="alert" hidden></div>
+                </div>
+              </form>
+
+              <div id="success-yes" hidden>
+                <h3>You're in!</h3>
+                <p>We have your RSVP for Wednesday, Nov 19 at 7:00 PM. A confirmation email is on the way.</p>
+                <div class="calendar-links">
+                  <a id="gcal" target="_blank" rel="noopener">Add to Google Calendar</a>
+                </div>
               </div>
-            </form>
 
-            <div id="success-yes" hidden>
-              <h3>You're in!</h3>
-              <p>We have your RSVP for Wednesday, Nov 19 at 7:00 PM. A confirmation email is on the way.</p>
-              <div class="calendar-links">
-                <a id="gcal" target="_blank" rel="noopener">Add to Google Calendar</a>
-                <!-- <a id="ics">Add to Apple Calendar</a> -->
+              <div id="success-no" hidden>
+                <h3>Thanks for letting us know.</h3>
+                <p>Your response was recorded. If plans change, simply reply to the confirmation email.</p>
               </div>
-            </div>
-
-            <div id="success-no" hidden>
-              <h3>Thanks for letting us know.</h3>
-              <p>Your response was recorded. If plans change, simply reply to the confirmation email.</p>
             </div>
           </section>
+        </div>
       </section>
+      <div class="brown-band full-bleed"></div>
     </main>
-    
 
     <footer class="footer">
       <p>160 Main · Northville, MI</p>
       <p class="fine">We only use your information for this event. © 160 Main</p>
-      <a href="https://eusocial.com"> Powered by EuSocial </a>
+      <a href="https://eusocial.com">Powered by EuSocial</a>
     </footer>
 
     <script src="/main.js" defer></script>
